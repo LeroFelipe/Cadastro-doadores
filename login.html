@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="assets/img/icon.png"/>
+    <link rel="stylesheet" href="assets/css/style.css">
+    <title>Login</title>
+    <style>
+        .error-message {
+            color: red;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="form-image">
+            <img src="assets/img/undraw_login_re_4vu2.svg" alt="">
+        </div>
+        <div class="form">
+            <form onsubmit="validateLogin(); return false;">
+                <div class="form-header">
+                    <div class="title">
+                        <h1>Login</h1>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-box">
+                        <label for="name">Usuário</label>
+                        <input id="usuario" type="text" name="usuario" placeholder="Digite o nome de usuário" required>
+                    </div>
+
+                    <div class="input-box">
+                        <label for="password">Password:</label>
+                        <input id="password" type="password" name="password" required>
+                    </div>
+
+                    <div class="login-button">
+                        <button type="submit">Login</button>
+                    </div>
+
+                    <div class="error-message" id="error-message"></div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function validateLogin() {
+            var username = document.getElementById("usuario").value;
+            var password = document.getElementById("password").value;
+            var errorMessage = document.getElementById("error-message");
+
+            // Aqui você pode adicionar sua lógica de validação
+            if (username === "sebastiao" && password === "1234") {
+                // Login bem-sucedido
+                errorMessage.textContent = ""; // Limpa a mensagem de erro
+                
+                // Redireciona para a página index.html
+                window.location.href = "index.html";
+            } else {
+                // Login falhou
+                errorMessage.textContent = "Nome de usuário ou senha inválidos.";
+            }
+        }
+    </script>
+</body>
+</html>
