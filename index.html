@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="assets/css/style.css">
+    <title>Formulário de cadastro</title>
+</head>
+<body>
+    <div class="container">
+        <div class="form-image">
+            <img src="assets/img/undraw_medicine_b-1-ol.svg" alt="">
+        </div>
+        <div class="form">
+            <form action="#">
+                <div class="form-header">
+                    <div class="title">
+                        <h1>Cadastro</h1>
+                    </div>
+                </div>
+
+                <div class="input-group">
+                    <div class="input-box">
+                        <label for="name">Nome</label>
+                        <input id="name" type="text" name="name" placeholder="Digite o nome completo" required>
+                    </div>
+
+                    <div class="input-box">
+                        <label for="endereco">Endereço</label>
+                        <input id="endereco" type="text" name="endereco" placeholder="Digite o endereço">
+                    </div>
+
+                    <div class="input-box">
+                        <label for="sangue">Tipo Sanguíneo</label>
+                        <input id="sangue" type="text" name="sangue" placeholder="Ex: O+ ou AB-" required>
+                    </div>
+
+                    <div class="input-box">
+                        <label for="number">Celular</label>
+                        <input id="number" type="tel" name="number" placeholder="(xx) xxxx-xxxx" required>
+                    </div>
+                </div>
+
+                <div class="gender-inputs">
+                    <div class="gender-title">
+                        <h6>Gênero</h6>
+                    </div>
+
+                    <div class="gender-group">
+                        <div class="gender-input">
+                            <input id="female" type="radio" name="gender">
+                            <label for="female">Feminino</label>
+                        </div>
+
+                        <div class="gender-input">
+                            <input id="male" type="radio" name="gender">
+                            <label for="male">Masculino</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cadastro-button">
+                    <button><a href="#">Cadastrar</a> </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+
+</html>
