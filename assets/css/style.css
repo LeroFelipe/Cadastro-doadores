@@ -188,6 +188,19 @@ body {
     color: #fff;
 }
 
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px; /* Adicione uma margem superior à tabela se desejar */
+}
+
+th, td {
+    padding: 10px; /* Adicione espaço interno (preenchimento) nas células */
+    text-align: center; /* Centraliza o texto horizontalmente */
+    vertical-align: middle; /* Centraliza verticalmente */
+    border: 1px solid #ddd; /* Adicione uma borda para destacar as células *//
+}
+
 @media screen and (max-width: 1330px) {
     .form-image {
         display: none;
