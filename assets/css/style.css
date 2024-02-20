@@ -55,7 +55,7 @@ body {
 .form-header h1::after {
     content: '';
     display: block;
-    width: 5rem;
+    width: 9rem;
     height: 0.3rem;
     background-color: #6c63ff;
     margin: 0 auto;
@@ -90,6 +90,26 @@ body {
 }
 
 .input-box input:focus-visible {
+    outline: 1px solid #6c63ff;
+}
+
+.input-box select {
+    margin: 0.6rem 4rem;
+    padding: 0.8rem 1.2rem;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 1px 1px 6px #0000001c;
+    font-size: 0.8rem;
+    appearance: none; /* Remove a seta padrão do navegador em alguns casos */
+    background: #ffffff; /* Cor de fundo do elemento select */
+    cursor: pointer;
+}
+
+.input-box select:hover {
+    background-color: #eeeeee75;
+}
+
+.input-box select:focus-visible {
     outline: 1px solid #6c63ff;
 }
 
