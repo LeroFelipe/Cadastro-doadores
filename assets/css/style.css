@@ -94,14 +94,14 @@ body {
 }
 
 .input-box select {
-    margin: 0.6rem 4rem;
+    margin: 0.6rem 8rem 0 0;
     padding: 0.8rem 1.2rem;
     border: none;
     border-radius: 10px;
     box-shadow: 1px 1px 6px #0000001c;
     font-size: 0.8rem;
-    appearance: none; /* Remove a seta padrão do navegador em alguns casos */
-    background: #ffffff; /* Cor de fundo do elemento select */
+    appearance: none;
+    background: #ffffff;
     cursor: pointer;
 }
 
