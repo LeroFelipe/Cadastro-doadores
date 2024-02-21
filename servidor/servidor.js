@@ -10,7 +10,7 @@ const port = 3000;
 app.use(bodyParser.urlencoded({ extended: true }));
 
 // Servir conteúdo estático (HTML, CSS, imagens)
-app.use('/assets', express.static(path.join(__dirname, 'assets')));
+app.use('/assets', express.static(path.join(__dirname, '../assets')));
 app.use(express.static(path.join(__dirname)));
 
 const db = mysql.createPool({
@@ -39,14 +39,14 @@ db.query(`CREATE TABLE IF NOT EXISTS doadores (
 
 // Rotas para suas páginas
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../index.html'));
-});
-
-app.get('/login', (req, res) => {
   res.sendFile(path.join(__dirname, '../login.html'));
 });
 
-app.get('/tabela', (req, res) => {
+app.get('/index.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../index.html'));
+});
+
+app.get('/tabela.html', (req, res) => {
   res.sendFile(path.join(__dirname, '../tabela.html'));
 });
 
@@ -72,7 +72,7 @@ app.listen(port, () => {
 });
 
 console.log('Caminho completo para assets:', path.join(__dirname, 'assets'));
-
+console.log('Caminho para tabela.html:' , path.join(__dirname, '../tabela.html'));
 
 // Fechar o pool de conexões com o banco de dados ao encerrar o servidor
 process.on('SIGINT', () => {
