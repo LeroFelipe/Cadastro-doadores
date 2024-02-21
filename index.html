@@ -79,11 +79,56 @@
                 </div>
 
                 <div class="cadastro-button">
-                    <button><a href="#">Cadastrar</a> </button>
+                    <button onclick="cadastrarDoador()">Cadastrar</button>
                 </div>
             </form>
         </div>
     </div>
-</body>
 
+    <script>
+        // Função para enviar os dados do formulário para o servidor
+        function cadastrarDoador() {
+            // Obtenha os valores dos campos do formulário
+            var nome = document.getElementById("name").value;
+            var endereco = document.getElementById("endereco").value;
+            var celular = document.getElementById("number").value;
+            var sangue = document.getElementById("sangue").value;
+            var genero = document.querySelector('input[name="gender"]:checked') ? document.querySelector('input[name="gender"]:checked').value : "";
+
+            // Crie um objeto com os dados
+            var dados = {
+                nome: nome,
+                endereco: endereco,
+                tipo_sanguineo: sangue,
+                celular: celular,
+                genero: genero
+            };
+
+            // Faça uma solicitação AJAX para o servidor
+            fetch('/cadastro', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(dados),
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Sucesso:', data);
+                // Redirecione para a página principal ou faça qualquer outra ação necessária
+                window.location.href = "/";
+            })
+            .catch((error) => {
+                console.error('Erro:', error);
+                // Lide com o erro de acordo com os requisitos do seu projeto
+            });
+        }
+
+        // Evento para chamar a função cadastrarDoador() quando o formulário for enviado
+        document.querySelector('form').addEventListener('submit', function (event) {
+            event.preventDefault(); // Evita o envio padrão do formulário
+            cadastrarDoador(); // Chama a função para enviar os dados do formulário
+        });
+    </script>
+</body>
 </html>
