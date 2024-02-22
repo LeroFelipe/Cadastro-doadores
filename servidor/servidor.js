@@ -9,6 +9,10 @@ const port = 3000;
 
 app.use(bodyParser.urlencoded({ extended: true }));
 
+// Configurando o body-parser para lidar com dados JSON
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 // Servir conteúdo estático (HTML, CSS, imagens)
 app.use('/assets', express.static(path.join(__dirname, '../assets')));
 app.use(express.static(path.join(__dirname)));
@@ -37,13 +41,12 @@ db.query(`CREATE TABLE IF NOT EXISTS doadores (
   }
 });
 
-// Rotas para suas páginas
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../login.html'));
 });
 
-app.get('/index.html', (req, res) => {
-  res.sendFile(path.join(__dirname, '../index.html'));
+app.get('/cadastro.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../cadastro.html'));
 });
 
 app.get('/tabela.html', (req, res) => {
@@ -52,7 +55,16 @@ app.get('/tabela.html', (req, res) => {
 
 // Rota para receber dados do formulário
 app.post('/cadastro', (req, res) => {
+
+  console.log('Dados recebidos no servidor:', req.body);
+
   const { nome, endereco, tipo_sanguineo, celular, genero } = req.body;
+
+  // Verifica se todos os campos obrigatórios estão definidos
+  if (!nome || !celular || !tipo_sanguineo) {
+    console.error('Erro: Preencha todos os campos obrigatórios');
+    return res.status(400).send('Todos os campos obrigatórios devem ser preenchidos.');
+  }
 
   const query = `INSERT INTO doadores (nome, endereco, tipo_sanguineo, celular, genero) VALUES (?, ?, ?, ?, ?)`;
 

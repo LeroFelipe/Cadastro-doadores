@@ -29,8 +29,8 @@
 
                 <div class="input-group">
                     <div class="input-box">
-                        <label for="name">Nome</label>
-                        <input id="name" type="text" name="name" placeholder="Digite o nome completo" required>
+                        <label for="nome">Nome</label>
+                        <input id="nome" type="text" name="nome" placeholder="Digite o nome completo" required>
                     </div>
 
                     <div class="input-box">
@@ -67,19 +67,19 @@
 
                     <div class="gender-group">
                         <div class="gender-input">
-                            <input id="female" type="radio" name="gender">
+                            <input id="female" type="radio" name="gender" value="female">
                             <label for="female">Feminino</label>
                         </div>
 
                         <div class="gender-input">
-                            <input id="male" type="radio" name="gender">
+                            <input id="male" type="radio" name="gender" value="male">
                             <label for="male">Masculino</label>
                         </div>
                     </div>
                 </div>
 
                 <div class="cadastro-button">
-                    <button onclick="cadastrarDoador()">Cadastrar</button>
+                    <button type="button" onclick="cadastrarDoador()">Cadastrar</button>
                 </div>
             </form>
         </div>
@@ -88,13 +88,23 @@
     <script>
         // Função para enviar os dados do formulário para o servidor
         function cadastrarDoador() {
+
+            console.log("função cadastrarDoador executada")
+
             // Obtenha os valores dos campos do formulário
-            var nome = document.getElementById("name").value;
+            var nome = document.getElementById("nome").value;
             var endereco = document.getElementById("endereco").value;
             var celular = document.getElementById("number").value;
             var sangue = document.getElementById("sangue").value;
-            var genero = document.querySelector('input[name="gender"]:checked') ? document.querySelector('input[name="gender"]:checked').value : "";
+            var generoInput = document.querySelector('input[name="gender"]:checked');
+            var genero = generoInput ? generoInput.value : "";
 
+            // Valide os campos obrigatórios
+            if (!nome || !celular || !sangue) {
+                console.error('Erro: Preencha todos os campos obrigatórios');
+                return;
+            }
+            
             // Crie um objeto com os dados
             var dados = {
                 nome: nome,
@@ -103,6 +113,9 @@
                 celular: celular,
                 genero: genero
             };
+
+            // Exiba os dados no console antes de enviar
+            console.log('Dados a serem enviados:', dados);
 
             // Faça uma solicitação AJAX para o servidor
             fetch('/cadastro', {
@@ -115,20 +128,17 @@
             .then(response => response.json())
             .then(data => {
                 console.log('Sucesso:', data);
+                
+                alert('Cadastro realizado com sucesso!');
+
                 // Redirecione para a página principal ou faça qualquer outra ação necessária
-                window.location.href = "/";
+                window.location.href = "cadastro.html";
             })
             .catch((error) => {
                 console.error('Erro:', error);
                 // Lide com o erro de acordo com os requisitos do seu projeto
             });
         }
-
-        // Evento para chamar a função cadastrarDoador() quando o formulário for enviado
-        document.querySelector('form').addEventListener('submit', function (event) {
-            event.preventDefault(); // Evita o envio padrão do formulário
-            cadastrarDoador(); // Chama a função para enviar os dados do formulário
-        });
     </script>
 </body>
 </html>
