@@ -55,17 +55,25 @@
                     document.getElementById('tabelaDoadores').getElementsByTagName('tbody')[0].innerHTML = "";
 
                     dados.forEach((doador) => {
+
+                        // Formata a data antes de inserir na tabela
+                        const dataNascimentoFormatada = formatarData(doador.nascimento);
+
                         // Adiciona as colunas com os dados do doador
                         const newRow = document.getElementById('tabelaDoadores').getElementsByTagName('tbody')[0].insertRow();
-                        newRow.innerHTML = `<td>${doador.nome}</td><td>${doador.endereco}</td><td>${doador.celular}</td><td>${doador.nascimento}</td><td>${doador.tipo_sanguineo}</td><td>${doador.genero}</td><td>${doador.dataDoacao || '-'}</td><td>${doador.proximaDoacao || '-'}</td>`;
+                        newRow.innerHTML = `<td>${doador.nome}</td><td>${doador.endereco}</td><td>${doador.celular}</td><td>${dataNascimentoFormatada}</td><td>${doador.tipo_sanguineo}</td><td>${doador.genero}</td><td>${doador.dataDoacao || '-'}</td><td>${doador.proximaDoacao || '-'}</td>`;
                     
                         // Adiciona uma célula para os botões
                         const buttonsCell = newRow.insertCell();
 
-                        // Adiciona os botões na última coluna
-                        buttonsCell.insertAdjacentHTML('beforeend', `<button onclick="agendarDoador(${doador.id})">Agendar</button>`);
-                        buttonsCell.insertAdjacentHTML('beforeend', `<button onclick="editarDoador(${doador.id})">Editar</button>`);
-                        buttonsCell.insertAdjacentHTML('beforeend', `<button onclick="excluirDoador(${doador.id})">Excluir</button>`);
+                        // Cria uma div para os botões e a adiciona à célula
+                        const buttonsDiv = document.createElement('div');
+                        buttonsCell.appendChild(buttonsDiv);
+
+                        // Adiciona os botões na div
+                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="agendarDoador(${doador.id})">Agendar</button>`);
+                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="editarDoador(${doador.id})">Editar</button>`);
+                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="excluirDoador(${doador.id})">Excluir</button>`);
                     });
                     
                 } catch (error) {
@@ -90,6 +98,15 @@
             function excluirDoador(doadorId) {
                 // Implemente a lógica de exclusão do doador usando o doadorId
                 console.log('Excluir doador com ID:', doadorId);
+            }
+
+            // Função para formatar a data no formato dd/mm/aaaa
+            function formatarData(data) {
+                const dataObj = new Date(data);
+                const dia = String(dataObj.getDate()).padStart(2, '0');
+                const mes = String(dataObj.getMonth() + 1).padStart(2, '0'); // O mês é base 0, então adicionamos 1
+                const ano = dataObj.getFullYear();
+                return `${dia}/${mes}/${ano}`;
             }
 
             // Chama a função para carregar dados quando a página é carregada
