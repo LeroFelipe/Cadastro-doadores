@@ -96,3 +96,18 @@ process.on('SIGINT', () => {
     process.exit();
   });
 });
+
+app.get('/dados-doadores', (req, res) => {
+  // Consulta SQL para obter todos os doadores
+  const query = 'SELECT * FROM doadores';
+
+  db.query(query, (err, result) => {
+    if (err) {
+      console.error('Erro ao obter dados dos doadores:', err);
+      res.status(500).send('Erro ao obter dados dos doadores.');
+    } else {
+      // Enviar os dados dos doadores como resposta em formato JSON
+      res.status(200).json(result);
+    }
+  });
+});

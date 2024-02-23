@@ -14,9 +14,7 @@
             <h1>Doadores cadastrados</h1>
         </div>
 
-        <!-- Aqui você pode adicionar a tabela ou a estrutura que exibirá os cadastros -->
-        <table>
-            <!-- Estrutura da tabela aqui -->
+        <table id="tabelaDoadores">
             <thead>
                 <tr>
                     <th>Nome</th>
@@ -27,23 +25,7 @@
                 </tr>
             </thead>
             <tbody>
-                <!-- Dados da tabela aqui -->
-                <tr>
-                    <td>Lérisson</td>
-                    <td>Rua Exemplo, 123</td>
-                    <td>(99) 9999-9999</td>
-                    <td>O+</td>
-                    <td>Feminino</td>
-                </tr>
-                <!-- Dados da tabela aqui -->
-                <tr>
-                    <td>Fernanda</td>
-                    <td>Rua Exemplo, 342</td>
-                    <td>(99) 9999-9999</td>
-                    <td>AB+</td>
-                    <td>Feminino</td>
-                </tr>
-                <!-- Adicione mais linhas conforme necessário -->
+                <!-- Dados da tabela serão inseridos aqui dinamicamente -->
             </tbody>
         </table>
 
@@ -51,6 +33,30 @@
         <div class="cadastro-button">
             <button><a href="cadastro.html">Cadastrar</a></button>
         </div>
+
+        <script>
+            // Função para carregar dados do servidor e atualizar a tabela
+            async function carregarDados() {
+                try {
+                    const response = await fetch('/dados-doadores'); // Rota no servidor para obter dados
+                    const dados = await response.json();
+
+                    // Limpa a tabela
+                    document.getElementById('tabelaDoadores').getElementsByTagName('tbody')[0].innerHTML = "";
+
+                    // Popula a tabela com os dados do servidor
+                    dados.forEach((doador) => {
+                        const newRow = document.getElementById('tabelaDoadores').getElementsByTagName('tbody')[0].insertRow();
+                        newRow.innerHTML = `<td>${doador.nome}</td><td>${doador.endereco}</td><td>${doador.celular}</td><td>${doador.tipo_sanguineo}</td><td>${doador.genero}</td>`;
+                    });
+                } catch (error) {
+                    console.error('Erro ao carregar dados:', error);
+                }
+            }
+
+            // Chama a função para carregar dados quando a página é carregada
+            window.onload = carregarDados;
+        </script>
     </div>
 </body>
 </html>
