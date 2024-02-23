@@ -27,6 +27,8 @@
                     <th data-sort="celular">Celular</th>
                     <th data-sort="tipo_sanguineo">Tipo Sanguíneo</th>
                     <th data-sort="genero">Gênero</th>
+                    <th data-sort="dataDoacao">Data da doação</th>
+                    <th data-sort="priximaDoacao">Pŕoxima doação</th>
                 </tr>
             </thead>
             <tbody>
@@ -49,14 +51,42 @@
                     // Limpa a tabela
                     document.getElementById('tabelaDoadores').getElementsByTagName('tbody')[0].innerHTML = "";
 
-                    // Popula a tabela com os dados do servidor
                     dados.forEach((doador) => {
+                        // Adiciona as colunas com os dados do doador
                         const newRow = document.getElementById('tabelaDoadores').getElementsByTagName('tbody')[0].insertRow();
-                        newRow.innerHTML = `<td>${doador.nome}</td><td>${doador.endereco}</td><td>${doador.celular}</td><td>${doador.tipo_sanguineo}</td><td>${doador.genero}</td>`;
+                        newRow.innerHTML = `<td>${doador.nome}</td><td>${doador.endereco}</td><td>${doador.celular}</td><td>${doador.tipo_sanguineo}</td><td>${doador.genero}</td><td>${doador.dataDoacao || '-'}</td><td>${doador.proximaDoacao || '-'}</td>`;
+                    
+                        // Adiciona uma célula para os botões
+                        const buttonsCell = newRow.insertCell();
+
+                        // Adiciona os botões na última coluna
+                        buttonsCell.insertAdjacentHTML('beforeend', `<button onclick="agendarDoador(${doador.id})">Agendar</button>`);
+                        buttonsCell.insertAdjacentHTML('beforeend', `<button onclick="editarDoador(${doador.id})">Editar</button>`);
+                        buttonsCell.insertAdjacentHTML('beforeend', `<button onclick="excluirDoador(${doador.id})">Excluir</button>`);
                     });
+                    
                 } catch (error) {
                     console.error('Erro ao carregar dados:', error);
                 }
+            }
+
+            // Função para lidar com o agendamento do doador
+            function agendarDoador(doadorId) {
+                // Implemente a lógica de agendamento do doador usando o doadorId
+                console.log('Agendar doador com ID:', doadorId);
+            }
+
+            // Função para lidar com a edição do doador
+            function editarDoador(doadorId) {
+                // Implemente a lógica de edição do doador usando o doadorId
+                // Redirecione para a página de edição ou exiba um formulário de edição, por exemplo.
+                console.log('Editar doador com ID:', doadorId);
+            }
+
+            // Função para lidar com a exclusão do doador
+            function excluirDoador(doadorId) {
+                // Implemente a lógica de exclusão do doador usando o doadorId
+                console.log('Excluir doador com ID:', doadorId);
             }
 
             // Chama a função para carregar dados quando a página é carregada
