@@ -30,8 +30,9 @@ db.query(`CREATE TABLE IF NOT EXISTS doadores (
   id INT AUTO_INCREMENT PRIMARY KEY,
   nome VARCHAR(255) NOT NULL,
   endereco VARCHAR(255),
-  tipo_sanguineo VARCHAR(10) NOT NULL,
   celular VARCHAR(15) NOT NULL,
+  nascimento DATE,
+  tipo_sanguineo VARCHAR(10) NOT NULL,
   genero VARCHAR(10)
 )`, (err) => {
   if (err) {
@@ -58,17 +59,11 @@ app.post('/cadastro', (req, res) => {
 
   console.log('Dados recebidos no servidor:', req.body);
 
-  const { nome, endereco, tipo_sanguineo, celular, genero } = req.body;
+  const { nome, endereco, celular, nascimento, tipo_sanguineo, genero } = req.body;
 
-  // Verifica se todos os campos obrigatórios estão definidos
-  if (!nome || !celular || !tipo_sanguineo) {
-    console.error('Erro: Preencha todos os campos obrigatórios');
-    return res.status(400).send('Todos os campos obrigatórios devem ser preenchidos.');
-  }
+  const query = `INSERT INTO doadores (nome, endereco, celular, nascimento, tipo_sanguineo, genero) VALUES (?, ?, ?, ?, ?, ?)`;
 
-  const query = `INSERT INTO doadores (nome, endereco, tipo_sanguineo, celular, genero) VALUES (?, ?, ?, ?, ?)`;
-
-  db.query(query, [nome, endereco, tipo_sanguineo, celular, genero], (err, result) => {
+  db.query(query, [nome, endereco, celular, nascimento, tipo_sanguineo, genero], (err, result) => {
     if (err) {
       console.error('Erro ao inserir dados:', err);
       res.status(500).send('Erro ao processar o cadastro.');

@@ -11,7 +11,7 @@
     <title>Doadores cadastrados</title>
 </head>
 <body>
-    <div class="form">
+    <div class="tabela">
         <div class="title">
             <h1>Doadores cadastrados</h1>
         </div>
@@ -19,26 +19,29 @@
         <input class="search" placeholder="Filtrar" />
 
         <!-- Estrutura da tabela -->
-        <table id="tabelaDoadores">
-            <thead>
-                <tr>
-                    <th data-sort="nome">Nome</th>
-                    <th data-sort="endereco">Endereço</th>
-                    <th data-sort="celular">Celular</th>
-                    <th data-sort="tipo_sanguineo">Tipo Sanguíneo</th>
-                    <th data-sort="genero">Gênero</th>
-                    <th data-sort="dataDoacao">Data da doação</th>
-                    <th data-sort="priximaDoacao">Pŕoxima doação</th>
-                </tr>
-            </thead>
-            <tbody>
-                <!-- Dados da tabela serão inseridos aqui dinamicamente -->
-            </tbody>
-        </table>
+        <div class="tabela-container">
+            <table id="tabelaDoadores">
+                <thead>
+                    <tr>
+                        <th data-sort="nome">Nome</th>
+                        <th data-sort="endereco">Endereço</th>
+                        <th data-sort="celular">Celular</th>
+                        <th data-sort="nascimento">Data de Nascimento</th>
+                        <th data-sort="tipo_sanguineo">Tipo Sanguíneo</th>
+                        <th data-sort="genero">Gênero</th>
+                        <th data-sort="dataDoacao">Data da Doação</th>
+                        <th data-sort="proximaDoacao">Próxima Doação</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dados da tabela serão inseridos aqui dinamicamente -->
+                </tbody>
+            </table>
+        </div>
 
         <!-- Botão para voltar para a página de cadastro -->
-        <div class="cadastro-button">
-            <button><a href="cadastro.html">Cadastrar</a></button>
+        <div class="botao-voltar">
+            <button><a href="cadastro.html">Cadastro</a></button>
         </div>
 
         <script>
@@ -54,7 +57,7 @@
                     dados.forEach((doador) => {
                         // Adiciona as colunas com os dados do doador
                         const newRow = document.getElementById('tabelaDoadores').getElementsByTagName('tbody')[0].insertRow();
-                        newRow.innerHTML = `<td>${doador.nome}</td><td>${doador.endereco}</td><td>${doador.celular}</td><td>${doador.tipo_sanguineo}</td><td>${doador.genero}</td><td>${doador.dataDoacao || '-'}</td><td>${doador.proximaDoacao || '-'}</td>`;
+                        newRow.innerHTML = `<td>${doador.nome}</td><td>${doador.endereco}</td><td>${doador.celular}</td><td>${doador.nascimento}</td><td>${doador.tipo_sanguineo}</td><td>${doador.genero}</td><td>${doador.dataDoacao || '-'}</td><td>${doador.proximaDoacao || '-'}</td>`;
                     
                         // Adiciona uma célula para os botões
                         const buttonsCell = newRow.insertCell();

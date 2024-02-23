@@ -79,7 +79,7 @@ body {
 .input-box {
     display: flex;
     flex-direction: column;
-    margin-bottom: 1.1rem;
+    margin-bottom: 0.8rem;
 }
 
 .input-box input {
@@ -152,9 +152,15 @@ body {
     color: #000000c0;
 }
 
+.cadastro-button  {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 .cadastro-button button {
-    width: 100%;
-    margin-top: 2.5rem;
+    justify-content: center;
+    width: 40%;
     border: none;
     background-color: #6c63ff;
     padding: 0.62rem;
@@ -194,10 +200,21 @@ body {
     color: #fff;
 }
 
-table {
+.tabela{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px;
+    background-color: #fff
+}
+
+.tabela-container{
+    margin: 10px 0 10px;
+}
+
+table{
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px; /* Adicione uma margem superior à tabela se desejar */
 }
 
 th, td {
@@ -205,6 +222,27 @@ th, td {
     text-align: center; /* Centraliza o texto horizontalmente */
     vertical-align: middle; /* Centraliza verticalmente */
     border: 1px solid #ddd; /* Adicione uma borda para destacar as células *//
+}
+
+.botao-voltar button {
+    width: 100%;
+    margin-top: 10px;
+    border: none;
+    background-color: #6c63ff;
+    padding: 0.62rem;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.botao-voltar button:hover {
+    background-color: #6b63fff1;
+}
+
+.botao-voltar button a {
+    text-decoration: none;
+    font-size: 0.93rem;
+    font-weight: 500;
+    color: #fff;
 }
 
 @media screen and (max-width: 1330px) {
