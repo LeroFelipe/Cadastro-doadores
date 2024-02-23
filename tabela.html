@@ -6,6 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="assets/img/icon.png"/>
     <link rel="stylesheet" href="assets/css/style.css">
+    <!-- Link para a biblioteca List.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>
     <title>Doadores cadastrados</title>
 </head>
 <body>
@@ -14,14 +16,17 @@
             <h1>Doadores cadastrados</h1>
         </div>
 
+        <input class="search" placeholder="Filtrar" />
+
+        <!-- Estrutura da tabela -->
         <table id="tabelaDoadores">
             <thead>
                 <tr>
-                    <th>Nome</th>
-                    <th>Endereço</th>
-                    <th>Celular</th>
-                    <th>Tipo Sanguíneo</th>
-                    <th>Gênero</th>
+                    <th data-sort="nome">Nome</th>
+                    <th data-sort="endereco">Endereço</th>
+                    <th data-sort="celular">Celular</th>
+                    <th data-sort="tipo_sanguineo">Tipo Sanguíneo</th>
+                    <th data-sort="genero">Gênero</th>
                 </tr>
             </thead>
             <tbody>
