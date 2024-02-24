@@ -45,6 +45,12 @@ body {
     padding: 3rem;
 }
 
+form{
+    box-shadow: 1px 1px 6px #00000046;
+    padding: 5%;
+    border-radius: 20px;
+}
+
 .close-page{
     display: flex;
     justify-content: right;
@@ -56,7 +62,6 @@ body {
     display: flex;
     justify-content: space-between;
 }
-
 
 .form-header h1::after {
     content: '';
@@ -74,6 +79,7 @@ body {
     grid-template-columns: repeat(2, 1fr); /* Duas colunas com largura igual */
     gap: 20px; /* Espaçamento entre as colunas */
     flex-wrap: wrap;
+    padding: 0 5px 0 5px;
 }
 
 .input-box {
@@ -87,7 +93,7 @@ body {
     padding: 0.8rem 1.2rem;
     border: none;
     border-radius: 10px;
-    box-shadow: 1px 1px 6px #0000001c;
+    box-shadow: 1px 1px 6px #00000046;
     font-size: 0.8rem;
 }
 
@@ -104,7 +110,7 @@ body {
     padding: 0.8rem 1.2rem;
     border: none;
     border-radius: 10px;
-    box-shadow: 1px 1px 6px #0000001c;
+    box-shadow: 1px 1px 6px #00000046;
     font-size: 0.8rem;
     appearance: none;
     background: #ffffff;
@@ -152,52 +158,45 @@ body {
     color: #000000c0;
 }
 
-.cadastro-button  {
+.button-cadastrar {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.cadastro-button button {
-    justify-content: center;
+.button-cadastrar button {
     width: 40%;
     border: none;
     background-color: #6c63ff;
     padding: 0.62rem;
     border-radius: 5px;
     cursor: pointer;
-}
-
-.cadastro-button button:hover {
-    background-color: #6b63fff1;
-}
-
-.cadastro-button button a {
     text-decoration: none;
     font-size: 0.93rem;
     font-weight: 500;
     color: #fff;
 }
 
+.button-cadastrar button:hover {
+    background-color: #6b63fff1;
+}
+
 .login-button button {
     width: 100%;
-    margin-top: 2.5rem;
+    margin-top: 3px;
     border: none;
     background-color: #6c63ff;
     padding: 0.62rem;
     border-radius: 5px;
     cursor: pointer;
-}
-
-.login-button button:hover {
-    background-color: #6b63fff1;
-}
-
-.login-button button a {
     text-decoration: none;
     font-size: 0.93rem;
     font-weight: 500;
     color: #fff;
+}
+
+.login-button button:hover {
+    background-color: #6b63fff1;
 }
 
 .tabela{
@@ -205,7 +204,7 @@ body {
     flex-direction: column;
     align-items: center;
     padding: 40px;
-    background-color: #fff
+    background-color: #fff;
 }
 
 .tabela-container{
@@ -224,7 +223,11 @@ th, td {
     border: 1px solid #ddd; /* Adicione uma borda para destacar as células *//
 }
 
-.botao-voltar button {
+.buttons-container button{
+    margin: 3px;
+}
+
+.botao-cadastro button {
     width: 100%;
     margin-top: 10px;
     border: none;
@@ -234,11 +237,11 @@ th, td {
     cursor: pointer;
 }
 
-.botao-voltar button:hover {
+.botao-cadastro button:hover {
     background-color: #6b63fff1;
 }
 
-.botao-voltar button a {
+.botao-cadastro button a {
     text-decoration: none;
     font-size: 0.93rem;
     font-weight: 500;
@@ -257,19 +260,23 @@ th, td {
     }
 }
 
-@media screen and (max-width: 1064px) {
+@media screen and (max-width: 1150px) {
     .container {
         width: 90%;
-        height: auto;
     }
+
     .input-group {
         display: flex;
         flex-direction: column;
         z-index: 5;
-        padding-right: 5rem;
-        max-height: 10rem;
+        padding-right: 1rem;
+        max-height: 40vh;
         overflow-y: scroll;
         flex-wrap: nowrap;
+    }
+
+    .button-cadastrar{
+        margin-top: 20px;
     }
     
     .gender-group {

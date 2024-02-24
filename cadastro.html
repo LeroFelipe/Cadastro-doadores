@@ -87,7 +87,7 @@
 
                 </div>
 
-                <div class="cadastro-button">
+                <div class="button-cadastrar">
                     <button type="button" onclick="cadastrarDoador()">Cadastrar</button>
                 </div>
             </form>
@@ -110,8 +110,9 @@
             var genero = generoInput ? generoInput.value : "";
 
             // Valide os campos obrigatórios
-            if (!nome || !celular || !sangue) {
+            if (!nome || !celular || !dataNascimento ||!sangue || !genero) {
                 console.error('Erro: Preencha todos os campos obrigatórios');
+                alert('Preencha todos os campos obrigatórios.');
                 return;
             }
             

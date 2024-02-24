@@ -40,7 +40,7 @@
         </div>
 
         <!-- Botão para voltar para a página de cadastro -->
-        <div class="botao-voltar">
+        <div class="botao-cadastro">
             <button><a href="cadastro.html">Cadastro</a></button>
         </div>
 
@@ -68,6 +68,7 @@
 
                         // Cria uma div para os botões e a adiciona à célula
                         const buttonsDiv = document.createElement('div');
+                        buttonsDiv.classList.add('buttons-container');
                         buttonsCell.appendChild(buttonsDiv);
 
                         // Adiciona os botões na div
