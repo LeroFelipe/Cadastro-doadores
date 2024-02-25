@@ -33,7 +33,8 @@ db.query(`CREATE TABLE IF NOT EXISTS doadores (
   celular VARCHAR(15) NOT NULL,
   nascimento DATE,
   tipo_sanguineo VARCHAR(10) NOT NULL,
-  genero VARCHAR(10)
+  genero VARCHAR(10),
+  data_doacao DATE
 )`, (err) => {
   if (err) {
     console.error('Erro ao criar tabela:', err);
@@ -107,6 +108,7 @@ process.on('SIGINT', () => {
   });
 });
 
+// Rota para obter dados o servidor
 app.get('/dados-doadores', (req, res) => {
   // Consulta SQL para obter todos os doadores
   const query = 'SELECT * FROM doadores';

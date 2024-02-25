@@ -6,8 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="assets/img/icon.png"/>
     <link rel="stylesheet" href="assets/css/style.css">
-    <!-- Link para a biblioteca List.js -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/list.js/2.3.1/list.min.js"></script>
     <title>Doadores cadastrados</title>
 </head>
 <body>
@@ -16,22 +14,20 @@
             <h1>Doadores cadastrados</h1>
         </div>
 
-        <input class="search" placeholder="Filtrar" />
-
         <!-- Estrutura da tabela -->
         <div class="tabela-container">
             <table id="tabelaDoadores">
                 <thead>
                     <tr>
-                        <th data-sort="nome">Nome</th>
-                        <th data-sort="endereco">Endereço</th>
-                        <th data-sort="celular">Celular</th>
-                        <th data-sort="nascimento">Data de Nascimento</th>
-                        <th data-sort="idade">Idade</th>
-                        <th data-sort="tipo_sanguineo">Tipo Sanguíneo</th>
-                        <th data-sort="genero">Gênero</th>
-                        <th data-sort="dataDoacao">Data da Doação</th>
-                        <th data-sort="proximaDoacao">Próxima Doação</th>
+                        <th>Nome</th>
+                        <th>Endereço</th>
+                        <th>Celular</th>
+                        <th>Data de Nascimento</th>
+                        <th>Idade</th>
+                        <th>Tipo Sanguíneo</th>
+                        <th>Gênero</th>
+                        <th>Data da Doação</th>
+                        <th>Próxima Doação</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -65,7 +61,15 @@
 
                         // Adiciona as colunas com os dados do doador
                         const newRow = document.getElementById('tabelaDoadores').getElementsByTagName('tbody')[0].insertRow();
-                        newRow.innerHTML = `<td>${doador.nome}</td><td>${doador.endereco}</td><td>${doador.celular}</td><td>${dataNascimentoFormatada}</td><td>${idadeDoador} Anos</td><td>${doador.tipo_sanguineo}</td><td>${doador.genero}</td><td>${doador.dataDoacao || '-'}</td><td>${doador.proximaDoacao || '-'}</td>`;
+                        newRow.innerHTML = `<td>${doador.nome}</td>
+                                            <td>${doador.endereco}</td>
+                                            <td>${doador.celular}</td>
+                                            <td>${dataNascimentoFormatada}</td>
+                                            <td>${idadeDoador} Anos</td>
+                                            <td>${doador.tipo_sanguineo}</td>
+                                            <td>${doador.genero}</td>
+                                            <td><input type="date" name="dataDoacao" class="dataDoacao" required"></td>
+                                            <td>${doador.proximaDoacao || '-'}</td>`;
                     
                         // Adiciona uma célula para os botões
                         const buttonsCell = newRow.insertCell();
@@ -76,9 +80,12 @@
                         buttonsCell.appendChild(buttonsDiv);
 
                         // Adiciona os botões na div
-                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="agendarDoador(${doador.id})">Agendar</button>`);
                         buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="editarDoador(${doador.id})">Editar</button>`);
                         buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="excluirDoador(${doador.id})">Excluir</button>`);
+
+                        // Adiciona um evento 'blur' ao input de data para chamar agendarDoador
+                        const inputDate = newRow.querySelector('.dataDoacao');
+                        inputDate.addEventListener('blur', (event) => agendarDoador(doador.id, event.target.value));
                     });
                     
                 } catch (error) {
@@ -87,9 +94,9 @@
             }
 
             // Função para lidar com o agendamento do doador
-            function agendarDoador(doadorId) {
-                // Implemente a lógica de agendamento do doador usando o doadorId
-                console.log('Agendar doador com ID:', doadorId);
+            function agendarDoador(doadorId, dataDoacao) {
+                console.log(`Agendar doador com ID: ,${doadorId}, Data: ${dataDoacao}`);
+                //Adicionar lógica para inclusão de dados no Servidor
             }
 
             // Função para lidar com a edição do doador
@@ -104,7 +111,7 @@
                 // Popup de confirmação
                 const confirmacao = window.confirm('Você realmente deseja excluir esse doador?');
 
-                    // Se o usuário confirmar, prosseguir com a exclusão
+                // Se o usuário confirmar, prosseguir com a exclusão
                 if (confirmacao) {
                     fetch(`/excluir-doador/${doadorId}`, {
                         method: 'DELETE',
