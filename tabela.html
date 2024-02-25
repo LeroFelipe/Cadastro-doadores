@@ -27,6 +27,7 @@
                         <th>Tipo Sanguíneo</th>
                         <th>Gênero</th>
                         <th>Data da Doação</th>
+                        <th>Protocolo</th>
                         <th>Próxima Doação</th>
                     </tr>
                 </thead>
@@ -69,8 +70,9 @@
                                             <td>${doador.tipo_sanguineo}</td>
                                             <td>${doador.genero}</td>
                                             <td><input type="date" name="dataDoacao" class="dataDoacao" required"></td>
-                                            <td>${doador.proximaDoacao || '-'}</td>`;
-                    
+                                            <td>${doador.proximaDoacao || '-'}</td>
+                                            <td> - </td>`;
+                                                
                         // Adiciona uma célula para os botões
                         const buttonsCell = newRow.insertCell();
 
@@ -84,19 +86,14 @@
                         buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="editarDoador(${doador.id})">Editar</button>`);
                         buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="excluirDoador(${doador.id})">Excluir</button>`);
                         
-                        /*
-                        console.log(doador.data_doacao)
+                        const inputDate = newRow.querySelector('.dataDoacao');
 
-                        if (doador.data_doacao !== null){
-                            const inputDate = newRow.querySelector('.dataDoacao');
-                            const dataDoacaoUTC = new Date(doador.data_doacao); // Converte a string para um objeto Date
-                            const dataDoacaoLocal = dataDoacaoUTC.toLocaleDateString('pt-BR'); // Converte para o formato local
-
-                            inputDate.value = dataDoacaoLocal; // Atribui ao campo de data
-                            
-                            console.log(dataDoacaoLocal)
-                        }*/
-
+                        // Verifica se a data do doador não é nula antes de preencher o campo de data
+                        if (doador.data_doacao !== null) {
+                            const dataDoacaoUTC = new Date(doador.data_doacao);
+                            const dataDoacaoLocal = dataDoacaoUTC.toISOString().split('T')[0];
+                            inputDate.value = dataDoacaoLocal;
+                        }
                     });
                     
                 } catch (error) {
@@ -106,24 +103,29 @@
 
             // Função para lidar com o agendamento do doador
             function agendarDoador(doadorId, dataDoacao) {
-                console.log(`Agendar doador com ID: ,${doadorId}, Data: ${dataDoacao}`);
-                
-                // Enviar a solicitação HTTP POST para a rota de agendamento do doador no backend
-                fetch(`/agendar-doador/${doadorId}`, {
-                    method: 'POST',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                    body: JSON.stringify({ dataDoacao }),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log(data.message);
-                    // Adicionar lógica adicional, se necessário
-                })
-                .catch(error => {
-                    console.error('Erro ao agendar doador:', error);
-                });
+                // Popup de confirmação
+                const confirmacao = window.confirm('Confirmar agendamento?');
+
+                if(confirmacao){
+                    console.log(`Agendar doador com ID: ,${doadorId}, Data: ${dataDoacao}`);
+                    
+                    // Enviar a solicitação HTTP POST para a rota de agendamento do doador no backend
+                    fetch(`/agendar-doador/${doadorId}`, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ dataDoacao }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data.message);
+                        // Adicionar lógica adicional, se necessário
+                    })
+                    .catch(error => {
+                        console.error('Erro ao agendar doador:', error);
+                    });
+                }
             }
 
             // Função para lidar com a edição do doador
