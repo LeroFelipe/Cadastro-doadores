@@ -78,8 +78,23 @@ app.listen(port, () => {
   console.log(`Servidor rodando em http://localhost:${port}`);
 });
 
-console.log('Caminho completo para assets:', path.join(__dirname, 'assets'));
-console.log('Caminho para tabela.html:' , path.join(__dirname, '../tabela.html'));
+// Rota para excluir um doador pelo ID
+app.delete('/excluir-doador/:id', (req, res) => {
+  const doadorId = req.params.id;
+
+  // Consulta SQL para excluir o doador pelo ID
+  const query = 'DELETE FROM doadores WHERE id = ?';
+
+  db.query(query, [doadorId], (err, result) => {
+    if (err) {
+      console.error('Erro ao excluir doador:', err);
+      res.status(500).send('Erro ao excluir doador.');
+    } else {
+      console.log('Doador excluído com sucesso!');
+      res.status(200).json({ message: 'Doador excluído com sucesso!' });
+    }
+  });
+});
 
 // Fechar o pool de conexões com o banco de dados ao encerrar o servidor
 process.on('SIGINT', () => {

@@ -27,6 +27,7 @@
                         <th data-sort="endereco">Endereço</th>
                         <th data-sort="celular">Celular</th>
                         <th data-sort="nascimento">Data de Nascimento</th>
+                        <th data-sort="idade">Idade</th>
                         <th data-sort="tipo_sanguineo">Tipo Sanguíneo</th>
                         <th data-sort="genero">Gênero</th>
                         <th data-sort="dataDoacao">Data da Doação</th>
@@ -58,10 +59,13 @@
 
                         // Formata a data antes de inserir na tabela
                         const dataNascimentoFormatada = formatarData(doador.nascimento);
+                        
+                        const idadeDoador = calcularIdade(doador.nascimento);
+                        console.log(`${idadeDoador} anos`);
 
                         // Adiciona as colunas com os dados do doador
                         const newRow = document.getElementById('tabelaDoadores').getElementsByTagName('tbody')[0].insertRow();
-                        newRow.innerHTML = `<td>${doador.nome}</td><td>${doador.endereco}</td><td>${doador.celular}</td><td>${dataNascimentoFormatada}</td><td>${doador.tipo_sanguineo}</td><td>${doador.genero}</td><td>${doador.dataDoacao || '-'}</td><td>${doador.proximaDoacao || '-'}</td>`;
+                        newRow.innerHTML = `<td>${doador.nome}</td><td>${doador.endereco}</td><td>${doador.celular}</td><td>${dataNascimentoFormatada}</td><td>${idadeDoador} Anos</td><td>${doador.tipo_sanguineo}</td><td>${doador.genero}</td><td>${doador.dataDoacao || '-'}</td><td>${doador.proximaDoacao || '-'}</td>`;
                     
                         // Adiciona uma célula para os botões
                         const buttonsCell = newRow.insertCell();
@@ -97,8 +101,27 @@
 
             // Função para lidar com a exclusão do doador
             function excluirDoador(doadorId) {
-                // Implemente a lógica de exclusão do doador usando o doadorId
-                console.log('Excluir doador com ID:', doadorId);
+                // Popup de confirmação
+                const confirmacao = window.confirm('Você realmente deseja excluir esse doador?');
+
+                    // Se o usuário confirmar, prosseguir com a exclusão
+                if (confirmacao) {
+                    fetch(`/excluir-doador/${doadorId}`, {
+                        method: 'DELETE',
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log(data.message);
+                        // Atualize a página
+                        location.reload();
+                    })
+                    .catch(error => {
+                        console.error('Erro ao excluir doador:', error);
+                    });
+                    console.log('Excluir doador com ID:', doadorId);
+                } else {
+                    console.log('Exclusão cancelada pelo usuário.');
+                }
             }
 
             // Função para formatar a data no formato dd/mm/aaaa
@@ -108,6 +131,27 @@
                 const mes = String(dataObj.getMonth() + 1).padStart(2, '0'); // O mês é base 0, então adicionamos 1
                 const ano = dataObj.getFullYear();
                 return `${dia}/${mes}/${ano}`;
+            }
+
+            function calcularIdade(dataNascimento) {
+                const hoje = new Date();
+                const dataNascimentoObj = new Date(dataNascimento);
+
+                let idade = hoje.getFullYear() - dataNascimentoObj.getFullYear();
+
+                // Verifica se o aniversário já ocorreu este ano
+                const mesAtual = hoje.getMonth() + 1;
+                const diaAtual = hoje.getDate();
+
+                const aniversarioJaOcorreu = (mesAtual > dataNascimentoObj.getMonth() + 1) ||
+                                            (mesAtual === dataNascimentoObj.getMonth() + 1 && diaAtual >= dataNascimentoObj.getDate());
+
+                // Se o aniversário ainda não ocorreu este ano, subtrai 1 da idade
+                if (!aniversarioJaOcorreu) {
+                    idade--;
+                }
+
+                return idade;
             }
 
             // Chama a função para carregar dados quando a página é carregada
