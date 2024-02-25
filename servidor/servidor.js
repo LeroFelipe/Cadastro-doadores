@@ -75,8 +75,39 @@ app.post('/cadastro', (req, res) => {
   });
 });
 
-app.listen(port, () => {
-  console.log(`Servidor rodando em http://localhost:${port}`);
+// Rota para obter dados do servidor
+app.get('/dados-doadores', (req, res) => {
+  // Consulta SQL para obter todos os doadores
+  const query = 'SELECT * FROM doadores';
+
+  db.query(query, (err, result) => {
+    if (err) {
+      console.error('Erro ao obter dados dos doadores:', err);
+      res.status(500).send('Erro ao obter dados dos doadores.');
+    } else {
+      // Enviar os dados dos doadores como resposta em formato JSON
+      res.status(200).json(result);
+    }
+  });
+});
+
+// Rota para incluir data de doação 
+app.post('/agendar-doador/:id', (req, res) => {
+  const doadorId = req.params.id;
+  const { dataDoacao } = req.body;
+
+  // Consulta SQL para atualizar a data de doação do doador pelo ID
+  const query = 'UPDATE doadores SET data_doacao = ? WHERE id = ?';
+
+  db.query(query, [dataDoacao, doadorId], (err, result) => {
+    if (err) {
+      console.error('Erro ao agendar doador:', err);
+      res.status(500).send('Erro ao agendar doador.');
+    } else {
+      console.log('Doador agendado com sucesso!');
+      res.status(200).json({ message: 'Doador agendado com sucesso!' });
+    }
+  });
 });
 
 // Rota para excluir um doador pelo ID
@@ -97,6 +128,10 @@ app.delete('/excluir-doador/:id', (req, res) => {
   });
 });
 
+app.listen(port, () => {
+  console.log(`Servidor rodando em http://localhost:${port}`);
+});
+
 // Fechar o pool de conexões com o banco de dados ao encerrar o servidor
 process.on('SIGINT', () => {
   db.end((err) => {
@@ -105,21 +140,5 @@ process.on('SIGINT', () => {
     }
     console.log('Pool de conexões com o banco de dados encerrado.');
     process.exit();
-  });
-});
-
-// Rota para obter dados o servidor
-app.get('/dados-doadores', (req, res) => {
-  // Consulta SQL para obter todos os doadores
-  const query = 'SELECT * FROM doadores';
-
-  db.query(query, (err, result) => {
-    if (err) {
-      console.error('Erro ao obter dados dos doadores:', err);
-      res.status(500).send('Erro ao obter dados dos doadores.');
-    } else {
-      // Enviar os dados dos doadores como resposta em formato JSON
-      res.status(200).json(result);
-    }
   });
 });

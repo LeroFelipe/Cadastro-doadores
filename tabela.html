@@ -38,7 +38,8 @@
 
         <!-- Botão para voltar para a página de cadastro -->
         <div class="botao-cadastro">
-            <button><a href="cadastro.html">Cadastro</a></button>
+            <button type="button" onclick="window.location.href='cadastro.html'">Cadastro</button>
+            <!-- <button><a href="cadastro.html">Cadastro</a></button> -->
         </div>
 
         <script>
@@ -57,7 +58,6 @@
                         const dataNascimentoFormatada = formatarData(doador.nascimento);
                         
                         const idadeDoador = calcularIdade(doador.nascimento);
-                        console.log(`${idadeDoador} anos`);
 
                         // Adiciona as colunas com os dados do doador
                         const newRow = document.getElementById('tabelaDoadores').getElementsByTagName('tbody')[0].insertRow();
@@ -80,12 +80,23 @@
                         buttonsCell.appendChild(buttonsDiv);
 
                         // Adiciona os botões na div
+                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="agendarDoador(${doador.id}, document.querySelector('.dataDoacao').value)">Agendar</button>`);
                         buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="editarDoador(${doador.id})">Editar</button>`);
                         buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="excluirDoador(${doador.id})">Excluir</button>`);
+                        
+                        /*
+                        console.log(doador.data_doacao)
 
-                        // Adiciona um evento 'blur' ao input de data para chamar agendarDoador
-                        const inputDate = newRow.querySelector('.dataDoacao');
-                        inputDate.addEventListener('blur', (event) => agendarDoador(doador.id, event.target.value));
+                        if (doador.data_doacao !== null){
+                            const inputDate = newRow.querySelector('.dataDoacao');
+                            const dataDoacaoUTC = new Date(doador.data_doacao); // Converte a string para um objeto Date
+                            const dataDoacaoLocal = dataDoacaoUTC.toLocaleDateString('pt-BR'); // Converte para o formato local
+
+                            inputDate.value = dataDoacaoLocal; // Atribui ao campo de data
+                            
+                            console.log(dataDoacaoLocal)
+                        }*/
+
                     });
                     
                 } catch (error) {
@@ -96,7 +107,23 @@
             // Função para lidar com o agendamento do doador
             function agendarDoador(doadorId, dataDoacao) {
                 console.log(`Agendar doador com ID: ,${doadorId}, Data: ${dataDoacao}`);
-                //Adicionar lógica para inclusão de dados no Servidor
+                
+                // Enviar a solicitação HTTP POST para a rota de agendamento do doador no backend
+                fetch(`/agendar-doador/${doadorId}`, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ dataDoacao }),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log(data.message);
+                    // Adicionar lógica adicional, se necessário
+                })
+                .catch(error => {
+                    console.error('Erro ao agendar doador:', error);
+                });
             }
 
             // Função para lidar com a edição do doador

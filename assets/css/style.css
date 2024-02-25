@@ -236,17 +236,14 @@ th, td {
     padding: 0.62rem;
     border-radius: 5px;
     cursor: pointer;
-}
-
-.botao-cadastro button:hover {
-    background-color: #6b63fff1;
-}
-
-.botao-cadastro button a {
     text-decoration: none;
     font-size: 0.93rem;
     font-weight: 500;
     color: #fff;
+}
+
+.botao-cadastro button:hover {
+    background-color: #6b63fff1;
 }
 
 @media screen and (max-width: 1330px) {
