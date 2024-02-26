@@ -199,22 +199,24 @@ form{
     background-color: #6b63fff1;
 }
 
-.tabela{
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding: 40px;
-    background-color: #fff;
-    box-shadow: 1px 1px 40px #00000046;
-}
-
-.tabela-container{
-    margin: 10px 0 10px;
-}
 
 table{
     width: 100%;
     border-collapse: collapse;
+}
+
+.tabela{
+    padding: 40px;
+    background-color: #fff;
+    box-shadow: 1px 1px 40px #00000046;
+    overflow-x: auto;
+}
+
+.tabela .title{
+    white-space: nowrap;
+    text-align: center;
+    padding-bottom: 30px;
+    min-width: 1156px;
 }
 
 th, td {
@@ -228,8 +230,14 @@ th, td {
     margin: 3px;
 }
 
+.botao-cadastro{
+    display: flex;
+    justify-content: center;
+    min-width: 1156px;
+}
+
 .botao-cadastro button {
-    width: 100%;
+    width: 100px;
     margin-top: 10px;
     border: none;
     background-color: #6c63ff;

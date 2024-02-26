@@ -18,10 +18,10 @@ app.use('/assets', express.static(path.join(__dirname, '../assets')));
 app.use(express.static(path.join(__dirname)));
 
 const db = mysql.createPool({
-  host: process.env.DB_HOST || 'localhost',
-  user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || '2323',
-  database: process.env.DB_NAME || 'banco_de_doadores',
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
   connectionLimit: 10,
 });
 
@@ -96,7 +96,7 @@ app.post('/agendar-doador/:id', (req, res) => {
   const doadorId = req.params.id;
   const { dataDoacao } = req.body;
 
-  // Consulta SQL para atualizar a data de doação do doador pelo ID
+  // Consulta SQL parametrizada para atualizar a data de doação do doador pelo ID
   const query = 'UPDATE doadores SET data_doacao = ? WHERE id = ?';
 
   db.query(query, [dataDoacao, doadorId], (err, result) => {
