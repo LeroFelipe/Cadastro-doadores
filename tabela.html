@@ -44,7 +44,6 @@
         </div>
 
         <script>
-            
             // Função para carregar dados do servidor e atualizar a tabela
             async function carregarDados() {
                 try {
@@ -65,7 +64,7 @@
                         newRow.setAttribute('doador-id', doador.id);
 
                         // Formata a data antes de inserir na tabela
-                        const dataNascimentoFormatada = formatarData(doador.nascimento);
+                        const dataNascimentoBr = dataBrasil(formatarData(doador.nascimento));
                         
                         const idadeDoador = calcularIdade(doador.nascimento);
 
@@ -73,14 +72,14 @@
                         newRow.innerHTML = `<td>${doador.nome}</td>
                                             <td>${doador.endereco}</td>
                                             <td>${doador.celular}</td>
-                                            <td>${dataNascimentoFormatada}</td>
+                                            <td>${dataNascimentoBr}</td>
                                             <td>${idadeDoador} Anos</td>
                                             <td>${doador.tipo_sanguineo}</td>
                                             <td>${doador.genero}</td>
                                             <td><input type="date" name="dataDoacao" class="dataDoacao" required></td>
                                             <td> - </td>
                                             <td style="color: ${CorProximaDoacao(doador.genero, idadeDoador, doador.data_doacao)}">
-                                                ${calcularProximaDoacao(doador.genero, idadeDoador, doador.data_doacao)}
+                                                ${dataBrasil(calcularProximaDoacao(doador.genero, idadeDoador, doador.data_doacao))}
                                             </td>`;
 
                         // Adiciona uma célula para os botões
@@ -140,7 +139,10 @@
                     .catch(error => {
                         console.error('Erro ao agendar doador:', error);
                     });
+
+                    location.reload();
                 }
+                
             }
 
             //Função para calcular a próxima doação
@@ -174,10 +176,12 @@
                 let hoje = new Date();
                 hoje = formatarData(hoje)
               
-                if (proximaDoacao < hoje) {
-                    cor = 'green'; // mudar para verde se a data já passou
-                } else {
-                    cor = 'red'; // mudar para vermelho se a data ainda não chegou
+                if (proximaDoacao !== 'a definir'){
+                    if (proximaDoacao < hoje) {
+                        cor = 'green'; // mudar para verde se a data já passou
+                    } else {
+                        cor = 'red'; // mudar para vermelho se a data ainda não chegou
+                    }
                 }
                 
                 return cor;
@@ -218,9 +222,20 @@
             function formatarData(data) {
                 const dataObj = new Date(data);
                 const dia = String(dataObj.getDate()).padStart(2, '0');
-                const mes = String(dataObj.getMonth() + 1).padStart(2, '0'); // O mês é base 0, então adicionamos 1
+                const mes = String(dataObj.getMonth() + 1).padStart(2, '0');
                 const ano = dataObj.getFullYear();
-                return `${dia}/${mes}/${ano}`;
+                return `${ano}/${mes}/${dia}`;
+            }   
+
+            function dataBrasil(dataString) {
+                const partes = dataString.split('/');
+                if (partes.length === 3) {
+                    // Verificar se há três partes (dia, mês, ano)
+                    const data = `${partes[2]}/${partes[1]}/${partes[0]}`;
+                    return data;
+                } else {
+                    return 'a definir';
+                }
             }
 
             // Função para calcular a idade do Doador
