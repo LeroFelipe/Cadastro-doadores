@@ -44,6 +44,7 @@
         </div>
 
         <script>
+            
             // Função para carregar dados do servidor e atualizar a tabela
             async function carregarDados() {
                 try {
@@ -55,13 +56,20 @@
 
                     dados.forEach((doador) => {
 
+                        const tabelaDoadores = document.getElementById('tabelaDoadores');
+                        const tbody = tabelaDoadores.getElementsByTagName('tbody')[0];
+
+                        const newRow = tbody.insertRow();
+
+                        // Usando setAttribute para adicionar o atributo 'teste' à <tr>
+                        newRow.setAttribute('doador-id', doador.id);
+
                         // Formata a data antes de inserir na tabela
                         const dataNascimentoFormatada = formatarData(doador.nascimento);
                         
                         const idadeDoador = calcularIdade(doador.nascimento);
 
                         // Adiciona as colunas com os dados do doador
-                        const newRow = document.getElementById('tabelaDoadores').getElementsByTagName('tbody')[0].insertRow();
                         newRow.innerHTML = `<td>${doador.nome}</td>
                                             <td>${doador.endereco}</td>
                                             <td>${doador.celular}</td>
@@ -69,10 +77,11 @@
                                             <td>${idadeDoador} Anos</td>
                                             <td>${doador.tipo_sanguineo}</td>
                                             <td>${doador.genero}</td>
-                                            <td><input type="date" name="dataDoacao" class="dataDoacao" required"></td>
-                                            <td>${doador.proximaDoacao || '-'}</td>
-                                            <td> - </td>`;
-                                                
+                                            <td><input type="date" name="dataDoacao" class="dataDoacao" required></td>
+                                            <td> - </td>
+                                            <td>${calcularProximaDoacao(doador.genero, idadeDoador, doador.data_doacao)}</td>
+                                            </tr>`;
+
                         // Adiciona uma célula para os botões
                         const buttonsCell = newRow.insertCell();
 
@@ -82,13 +91,13 @@
                         buttonsCell.appendChild(buttonsDiv);
 
                         // Adiciona os botões na div
-                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="agendarDoador(${doador.id}, document.querySelector('.dataDoacao').value)">Agendar</button>`);
+                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="agendarDoador(${doador.id})">Agendar</button>`);
                         buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="editarDoador(${doador.id})">Editar</button>`);
                         buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="excluirDoador(${doador.id})">Excluir</button>`);
-                        
+
                         const inputDate = newRow.querySelector('.dataDoacao');
 
-                        // Verifica se a data do doador não é nula antes de preencher o campo de data
+                        // Verifica se a data de doação não é nula antes de preencher o campo de data
                         if (doador.data_doacao !== null) {
                             const dataDoacaoUTC = new Date(doador.data_doacao);
                             const dataDoacaoLocal = dataDoacaoUTC.toISOString().split('T')[0];
@@ -102,20 +111,29 @@
             }
 
             // Função para lidar com o agendamento do doador
-            function agendarDoador(doadorId, dataDoacao) {
+            function agendarDoador(doadorId) {
+
+                // Encontrar o input de data correspondente à linha do doador com o id
+                const inputDate = document.querySelector(`tr[doador-id="${doadorId}"] .dataDoacao`);
+                
+                console.log('valor do input', inputDate);
+
+                // Obter o valor da data
+                const dataDoacao = inputDate.value; 
+
                 // Popup de confirmação
                 const confirmacao = window.confirm('Confirmar agendamento?');
 
                 if(confirmacao){
                     console.log(`Agendar doador com ID: ,${doadorId}, Data: ${dataDoacao}`);
-                    
+
                     // Enviar a solicitação HTTP POST para a rota de agendamento do doador no backend
                     fetch(`/agendar-doador/${doadorId}`, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify({ dataDoacao }),
+                        body: JSON.stringify({ dataDoacao } || null),
                     })
                     .then(response => response.json())
                     .then(data => {
@@ -128,10 +146,32 @@
                 }
             }
 
+            //Função para calcular a próxima doação
+            function calcularProximaDoacao(genero, idadeDoador, dataDoacao){
+                let proximaDoacao;
+                let dataDoacaoObj = null;
+              
+                if (dataDoacao !== null){
+                    // Certificar de que dataDoacao é um objeto Date
+                    dataDoacaoObj = new Date(dataDoacao);
+                }
+
+                if (genero === 'Masculino' && idadeDoador <= 59 && dataDoacaoObj != null) {
+                    proximaDoacao = new Date(dataDoacaoObj.getTime() + 60 * 24 * 60 * 1000 * 60); // 60 dias em milissegundos
+                } else if (genero === 'Feminino' && idadeDoador <= 59 && dataDoacaoObj != null) {
+                    proximaDoacao = new Date(dataDoacaoObj.getTime() + 90 * 24 * 60 * 1000 * 60); // 90 dias em milissegundos
+                } else if (genero === 'Masculino' && idadeDoador > 59 && dataDoacaoObj != null) {
+                    proximaDoacao = new Date(dataDoacaoObj.getTime() + 180 * 24 * 60 * 1000 * 60); // 180 dias em milissegundos
+                } else if (genero === 'Feminino' && idadeDoador > 59 && dataDoacaoObj != null) {
+                    proximaDoacao = new Date(dataDoacaoObj.getTime() + 210 * 24 * 60 * 1000 * 60); // 210 dias em milissegundos
+                }
+
+                return proximaDoacao ? formatarData(proximaDoacao) : 'a definir';
+            }
+
             // Função para lidar com a edição do doador
             function editarDoador(doadorId) {
-                // Implemente a lógica de edição do doador usando o doadorId
-                // Redirecione para a página de edição ou exiba um formulário de edição, por exemplo.
+                // Implementar a lógica de edição do doador usando o doadorId
                 console.log('Editar doador com ID:', doadorId);
             }
 
@@ -169,6 +209,7 @@
                 return `${dia}/${mes}/${ano}`;
             }
 
+            // Função para calcular a idade do Doador
             function calcularIdade(dataNascimento) {
                 const hoje = new Date();
                 const dataNascimentoObj = new Date(dataNascimento);
