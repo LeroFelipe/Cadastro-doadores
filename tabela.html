@@ -16,6 +16,7 @@
 
         <!-- Estrutura da tabela -->
         <div class="tabela-container">
+            <input type="text" id="filtro" placeholder="Filtrar">
             <table id="tabelaDoadores">
                 <thead>
                     <tr>
@@ -239,7 +240,8 @@
                 const ano = dataObj.getFullYear();
                 return `${ano}/${mes}/${dia}`;
             }   
-
+            
+            // Função para mudar o formato da data p/ DD/MM/AAAA
             function dataBrasil(dataString) {
                 const partes = dataString.split('/');
                 if (partes.length === 3) {
@@ -276,6 +278,19 @@
             // Chama a função para carregar dados quando a página é carregada
             window.onload = carregarDados;
         </script>
+
+        <script>
+            document.getElementById('filtro').addEventListener('input', function () {
+                    const filtro = this.value.toLowerCase();
+                    const linhas = document.querySelectorAll('#tabelaDoadores tbody tr');
+
+                    linhas.forEach(function (linha) {
+                        const textoLinha = linha.textContent.toLowerCase();
+                        linha.style.display = textoLinha.includes(filtro) ? '' : 'none';
+                    });
+                });
+        </script>
+        
     </div>
 </body>
 </html>

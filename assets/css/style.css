@@ -199,6 +199,19 @@ form{
     background-color: #6b63fff1;
 }
 
+#filtro {
+    width: 200px; /* Define a largura do input */
+    padding: 8px; /* Adiciona espaço interno para melhor aparência */
+    margin-bottom: 10px; /* Adiciona margem inferior para espaçamento */
+    border: 1px solid #ccc; /* Adiciona uma borda */
+    border-radius: 5px; /* Adiciona bordas arredondadas */
+    font-size: 16px; /* Define o tamanho da fonte */
+    outline: none; /* Remove a borda de foco padrão ao clicar */
+}
+
+#filtro::placeholder {
+    color: #888; /* Define a cor do texto do placeholder */
+}
 
 table{
     width: 100%;
