@@ -92,7 +92,7 @@
 
                         // Adiciona os botões na div
                         buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="agendarDoador(${doador.id})">Agendar</button>`);
-                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="editarDoador(${doador.id})">Editar</button>`);
+                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="editarDoador(${doador.id}, this)">Editar</button>`);
                         buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="excluirDoador(${doador.id})">Excluir</button>`);
 
                         const inputDate = newRow.querySelector('.dataDoacao');
@@ -170,6 +170,7 @@
 
             //Função para alterar a cor da data da próxima doação
             function CorProximaDoacao(genero, idadeDoador, dataDoacao) {
+
                 let cor = 'black'; // cor padrão
 
                 let proximaDoacao = calcularProximaDoacao(genero, idadeDoador, dataDoacao);
@@ -177,7 +178,7 @@
                 hoje = formatarData(hoje)
               
                 if (proximaDoacao !== 'a definir'){
-                    if (proximaDoacao < hoje) {
+                    if (proximaDoacao <= hoje) {
                         cor = 'green'; // mudar para verde se a data já passou
                     } else {
                         cor = 'red'; // mudar para vermelho se a data ainda não chegou
@@ -188,9 +189,21 @@
             }
 
             // Função para lidar com a edição do doador
-            function editarDoador(doadorId) {
+            function editarDoador(doadorId, btnEditar) {
                 // Implementar a lógica de edição do doador usando o doadorId
                 console.log('Editar doador com ID:', doadorId);
+                btnEditar.innerText = 'Salvar';
+                btnEditar.style.backgroundColor = '#ff6868'
+
+                btnEditar.onclick = function (){
+                    if (btnEditar.innerText == 'Salvar'){
+                        btnEditar.innerText = 'Editar';            
+                        btnEditar.style.backgroundColor = '#6868689e';
+                    } else{
+                        btnEditar.innerText = 'Salvar';
+                        btnEditar.style.backgroundColor = '#ff6868'
+                    }                                       
+                }
             }
 
             // Função para lidar com a exclusão do doador
