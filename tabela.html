@@ -61,7 +61,7 @@
 
                         const newRow = tbody.insertRow();
 
-                        // Usando setAttribute para adicionar o atributo 'teste' à <tr>
+                        // Usando setAttribute para adicionar o atributo ao <tr>
                         newRow.setAttribute('doador-id', doador.id);
 
                         // Formata a data antes de inserir na tabela
@@ -79,8 +79,9 @@
                                             <td>${doador.genero}</td>
                                             <td><input type="date" name="dataDoacao" class="dataDoacao" required></td>
                                             <td> - </td>
-                                            <td>${calcularProximaDoacao(doador.genero, idadeDoador, doador.data_doacao)}</td>
-                                            </tr>`;
+                                            <td style="color: ${CorProximaDoacao(doador.genero, idadeDoador, doador.data_doacao)}">
+                                                ${calcularProximaDoacao(doador.genero, idadeDoador, doador.data_doacao)}
+                                            </td>`;
 
                         // Adiciona uma célula para os botões
                         const buttonsCell = newRow.insertCell();
@@ -116,8 +117,6 @@
                 // Encontrar o input de data correspondente à linha do doador com o id
                 const inputDate = document.querySelector(`tr[doador-id="${doadorId}"] .dataDoacao`);
                 
-                console.log('valor do input', inputDate);
-
                 // Obter o valor da data
                 const dataDoacao = inputDate.value; 
 
@@ -125,8 +124,6 @@
                 const confirmacao = window.confirm('Confirmar agendamento?');
 
                 if(confirmacao){
-                    console.log(`Agendar doador com ID: ,${doadorId}, Data: ${dataDoacao}`);
-
                     // Enviar a solicitação HTTP POST para a rota de agendamento do doador no backend
                     fetch(`/agendar-doador/${doadorId}`, {
                         method: 'POST',
@@ -167,6 +164,23 @@
                 }
 
                 return proximaDoacao ? formatarData(proximaDoacao) : 'a definir';
+            }
+
+            //Função para alterar a cor da data da próxima doação
+            function CorProximaDoacao(genero, idadeDoador, dataDoacao) {
+                let cor = 'black'; // cor padrão
+
+                let proximaDoacao = calcularProximaDoacao(genero, idadeDoador, dataDoacao);
+                let hoje = new Date();
+                hoje = formatarData(hoje)
+              
+                if (proximaDoacao < hoje) {
+                    cor = 'green'; // mudar para verde se a data já passou
+                } else {
+                    cor = 'red'; // mudar para vermelho se a data ainda não chegou
+                }
+                
+                return cor;
             }
 
             // Função para lidar com a edição do doador
