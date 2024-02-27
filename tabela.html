@@ -76,7 +76,10 @@
                                             <td>${doador.endereco}</td>
                                             <td>${doador.celular}</td>
                                             <td>${dataNascimentoBr}</td>
-                                            <td>${doador.cpf}</td>
+                                            <td id="cpf${doador.id}" data-visivel="false">
+                                                <div id="cpfContent${doador.id}">******</div>
+                                                <span id="btn${doador.id}" class="icone" onclick="toggleCPF(${doador.id},${doador.cpf})">&#128065;</span>
+                                            </td>
                                             <td>${idadeDoador} Anos</td>
                                             <td>${doador.tipo_sanguineo}</td>
                                             <td>${doador.genero}</td>
@@ -95,7 +98,7 @@
                         buttonsCell.appendChild(buttonsDiv);
 
                         // Adiciona os botões na div
-                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="agendarDoador(${doador.id})">Agendar</button>`);
+                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="agendarDoador(${doador.id})">Protocolo</button>`);
                         buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="editarDoador(${doador.id}, this)">Editar</button>`);
                         buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="excluirDoador(${doador.id})">Excluir</button>`);
 
@@ -124,7 +127,7 @@
                 const dataDoacao = inputDate.value; 
 
                 // Popup de confirmação
-                const confirmacao = window.confirm('Confirmar agendamento?');
+                const confirmacao = window.confirm('Confirmar protocolo?');
 
                 if(confirmacao){
                     // Enviar a solicitação HTTP POST para a rota de agendamento do doador no backend
@@ -150,6 +153,7 @@
             }
 
             //Função para calcular a próxima doação
+
             function calcularProximaDoacao(genero, idadeDoador, dataDoacao){
                 let proximaDoacao;
                 let dataDoacaoObj = null;
@@ -173,6 +177,7 @@
             }
 
             //Função para alterar a cor da data da próxima doação
+
             function CorProximaDoacao(genero, idadeDoador, dataDoacao) {
 
                 let cor = 'black'; // cor padrão
@@ -195,6 +200,7 @@
             }
 
             // Função para lidar com a edição do doador
+
             function editarDoador(doadorId, btnEditar) {
                 // Implementar a lógica de edição do doador usando o doadorId
                 console.log('Editar doador com ID:', doadorId);
@@ -213,6 +219,7 @@
             }
 
             // Função para lidar com a exclusão do doador
+
             function excluirDoador(doadorId) {
                 // Popup de confirmação
                 const confirmacao = window.confirm('Você realmente deseja excluir esse doador?');
@@ -238,6 +245,7 @@
             }
 
             // Função para formatar a data no formato dd/mm/aaaa
+
             function formatarData(data) {
                 const dataObj = new Date(data);
                 const dia = String(dataObj.getDate()).padStart(2, '0');
@@ -247,6 +255,7 @@
             }   
             
             // Função para mudar o formato da data p/ DD/MM/AAAA
+
             function dataBrasil(dataString) {
                 const partes = dataString.split('/');
                 if (partes.length === 3) {
@@ -280,6 +289,24 @@
                 return idade;
             }
 
+            // Função para exibir e ocultar o CPF
+            function toggleCPF(doadorId, doadorCPF) {
+                const divCPF = document.getElementById(`cpfContent${doadorId}`);
+                let visivel = divCPF.dataset.visivel === 'true';
+                console.log(divCPF, visivel, doadorCPF);
+
+                if (!visivel) {
+                    // Torna o CPF visível
+                    divCPF.innerHTML = `${doadorCPF}`;
+                } else {
+                    // Oculta o CPF
+                    divCPF.innerHTML = `******`;
+                }
+
+                // Atualiza o dataset.visivel
+                divCPF.dataset.visivel = visivel ? 'false' : 'true';
+            }
+   
             // Chama a função para carregar dados quando a página é carregada
             window.onload = carregarDados;
         </script>

@@ -277,6 +277,10 @@ th, td {
     border: 1px solid #ddd;
 }
 
+.icone {
+    cursor: pointer;
+}
+
 .dataDoacao{
     display: flex;
     width: auto;
