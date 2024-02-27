@@ -78,11 +78,11 @@
                                             <td>${doador.tipo_sanguineo}</td>
                                             <td>${doador.genero}</td>
                                             <td><input type="date" name="dataDoacao" class="dataDoacao" required></td>
-                                            <td> - </td>
+                                            <td><input type="number" name="protocolo" class="protocolo"> </td>
                                             <td style="color: ${CorProximaDoacao(doador.genero, idadeDoador, doador.data_doacao)}">
                                                 ${dataBrasil(calcularProximaDoacao(doador.genero, idadeDoador, doador.data_doacao))}
-                                            </td>`;
-
+                                            </td>`;                                 
+                
                         // Adiciona uma célula para os botões
                         const buttonsCell = newRow.insertCell();
 
@@ -180,9 +180,11 @@
               
                 if (proximaDoacao !== 'a definir'){
                     if (proximaDoacao <= hoje) {
-                        cor = 'green'; // mudar para verde se a data já passou
+                        cor = '#23962c';
+                        
+
                     } else {
-                        cor = 'red'; // mudar para vermelho se a data ainda não chegou
+                        cor = '#ff6868'; // mudar para vermelho se a data ainda não chegou
                     }
                 }
                 
@@ -194,15 +196,15 @@
                 // Implementar a lógica de edição do doador usando o doadorId
                 console.log('Editar doador com ID:', doadorId);
                 btnEditar.innerText = 'Salvar';
-                btnEditar.style.backgroundColor = '#ff6868'
+                btnEditar.style.backgroundColor = '#ff6868';
 
                 btnEditar.onclick = function (){
                     if (btnEditar.innerText == 'Salvar'){
                         btnEditar.innerText = 'Editar';            
-                        btnEditar.style.backgroundColor = '#6868689e';
+                        btnEditar.style.backgroundColor = '#c5c5c56c';
                     } else{
                         btnEditar.innerText = 'Salvar';
-                        btnEditar.style.backgroundColor = '#ff6868'
+                        btnEditar.style.backgroundColor = '#ff6868';
                     }                                       
                 }
             }
@@ -290,7 +292,7 @@
                     });
                 });
         </script>
-        
+
     </div>
 </body>
 </html>
