@@ -35,7 +35,8 @@ db.query(`CREATE TABLE IF NOT EXISTS doadores (
   cpf VARCHAR(15),
   tipo_sanguineo VARCHAR(10) NOT NULL,
   genero VARCHAR(10),
-  data_doacao DATE
+  data_doacao DATE,
+  protocolo VARCHAR(10)
 )`, (err) => {
   if (err) {
     console.error('Erro ao criar tabela:', err);
@@ -57,6 +58,7 @@ app.get('/tabela.html', (req, res) => {
 });
 
 // Rota para receber dados do formulário
+
 app.post('/cadastro', (req, res) => {
 
   console.log('Dados recebidos no servidor:', req.body);
@@ -77,6 +79,7 @@ app.post('/cadastro', (req, res) => {
 });
 
 // Rota para obter dados do servidor
+
 app.get('/dados-doadores', (req, res) => {
   // Consulta SQL para obter todos os doadores
   const query = 'SELECT * FROM doadores';
@@ -93,14 +96,15 @@ app.get('/dados-doadores', (req, res) => {
 });
 
 // Rota para incluir data de doação 
+
 app.post('/agendar-doador/:id', (req, res) => {
   const doadorId = req.params.id;
-  const { dataDoacao } = req.body;
+  const { dataDoacao, protocolo } = req.body;
 
   // Consulta SQL parametrizada para atualizar a data de doação do doador pelo ID
-  const query = 'UPDATE doadores SET data_doacao = ? WHERE id = ?';
+  const query = 'UPDATE doadores SET data_doacao = ?, protocolo = ? WHERE id = ?';
 
-  db.query(query, [dataDoacao, doadorId], (err, result) => {
+  db.query(query, [dataDoacao, protocolo, doadorId], (err, result) => {
     if (err) {
       console.error('Erro ao agendar doador:', err);
       res.status(500).send('Erro ao agendar doador.');
@@ -112,6 +116,7 @@ app.post('/agendar-doador/:id', (req, res) => {
 });
 
 // Rota para excluir um doador pelo ID
+
 app.delete('/excluir-doador/:id', (req, res) => {
   const doadorId = req.params.id;
 

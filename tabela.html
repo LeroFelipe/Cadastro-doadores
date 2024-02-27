@@ -84,7 +84,7 @@
                                             <td>${doador.tipo_sanguineo}</td>
                                             <td>${doador.genero}</td>
                                             <td><input type="date" name="dataDoacao" class="dataDoacao" required></td>
-                                            <td><input type="number" name="protocolo" class="protocolo"> </td>
+                                            <td><input type="text" oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '')" name="protocolo" class="protocolo" required></td>
                                             <td style="color: ${CorProximaDoacao(doador.genero, idadeDoador, doador.data_doacao)}">
                                                 ${dataBrasil(calcularProximaDoacao(doador.genero, idadeDoador, doador.data_doacao))}
                                             </td>`;                                 
@@ -102,14 +102,20 @@
                         buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="editarDoador(${doador.id}, this)">Editar</button>`);
                         buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="excluirDoador(${doador.id})">Excluir</button>`);
 
-                        const inputDate = newRow.querySelector('.dataDoacao');
-
                         // Verifica se a data de doação não é nula antes de preencher o campo de data
+                        const inputDate = newRow.querySelector('.dataDoacao');
+                        const inputProt = newRow.querySelector('.protocolo');
+
                         if (doador.data_doacao !== null) {
                             const dataDoacaoUTC = new Date(doador.data_doacao);
                             const dataDoacaoLocal = dataDoacaoUTC.toISOString().split('T')[0];
                             inputDate.value = dataDoacaoLocal;
                         }
+                        if (doador.protocolo !== null){
+                            const protocolo = doador.protocolo;
+                            inputProt.value  = protocolo;
+                        }
+
                     });
                     
                 } catch (error) {
@@ -117,14 +123,17 @@
                 }
             }
 
-            // Função para lidar com o agendamento do doador
+            // Função para lidar com o agendar doador
+
             function agendarDoador(doadorId) {
 
                 // Encontrar o input de data correspondente à linha do doador com o id
                 const inputDate = document.querySelector(`tr[doador-id="${doadorId}"] .dataDoacao`);
+                const inputProt = document.querySelector(`tr[doador-id="${doadorId}"] .protocolo`);
                 
-                // Obter o valor da data
+                // Obter o valor da data e protocolo
                 const dataDoacao = inputDate.value; 
+                const protocolo = inputProt.value;
 
                 // Popup de confirmação
                 const confirmacao = window.confirm('Confirmar protocolo?');
@@ -136,7 +145,7 @@
                         headers: {
                             'Content-Type': 'application/json',
                         },
-                        body: JSON.stringify({ dataDoacao } || null),
+                        body: JSON.stringify({ dataDoacao , protocolo }|| null),
                     })
                     .then(response => response.json())
                     .then(data => {

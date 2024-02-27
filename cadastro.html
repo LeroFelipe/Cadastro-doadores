@@ -54,8 +54,7 @@
                     <div class="input-box">
                         <div class="password-container">
                             <label for="cpf">CPF</label>
-                            <input id="cpf" type="password" name="cpf">
-                            <span id="btnMostrarSenha">	&#128065;</span>
+                            <input id="cpf" type="number" name="cpf">
                         </div>
                     </div>
 
@@ -162,20 +161,7 @@
                 // Lidar com o erros de acordo com os requisitos do projeto
             });
         }
+
     </script>
-
-    <script>
-        const campoSenha = document.getElementById('cpf');
-        const btnMostrarSenha = document.getElementById('btnMostrarSenha');
-
-        btnMostrarSenha.addEventListener('click', function () {
-            if (campoSenha.type === 'password') {
-                campoSenha.type = 'text';
-            } else {
-                campoSenha.type = 'password';
-            }
-        });
-    </script>
-
 </body>
 </html>
