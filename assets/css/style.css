@@ -16,6 +16,7 @@ body {
 }
 
 .container {
+    margin-top: 40px;
     width: 80%;
     height: 80vh;
     display: flex;
@@ -47,14 +48,14 @@ body {
 
 form{
     box-shadow: 1px 1px 6px #00000046;
-    padding: 5%;
+    padding: 3%;
     border-radius: 20px;
 }
 
 .close-page{
     display: flex;
     justify-content: right;
-    padding: 0 0 5%;
+    padding: 0 0 1%;
 }
 
 .form-header {
@@ -74,10 +75,28 @@ form{
     border-radius: 10px;
 }
 
+.password-container {
+    position: relative;
+    width: 250px;
+}
+
+#cpf {
+    width: 100%;
+    padding: 10px;
+}
+
+#btnMostrarSenha {
+    position: absolute;
+    right: 5px;
+    top: 60%;
+    transform: translateY(-50%);
+    cursor: pointer;
+}
+
 .input-group {
     display: grid;
     grid-template-columns: repeat(2, 1fr); /* Duas colunas com largura igual */
-    gap: 20px;
+    gap: 10px 20px;
     flex-wrap: wrap;
     padding: 0 5px 0 5px;
 }
@@ -85,7 +104,6 @@ form{
 .input-box {
     display: flex;
     flex-direction: column;
-    margin-bottom: 0.8rem;
 }
 
 .input-box input {
@@ -159,6 +177,7 @@ form{
 }
 
 .button-cadastrar {
+    margin-top: 15px;
     display: flex;
     justify-content: center;
     align-items: center;

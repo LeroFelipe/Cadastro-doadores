@@ -22,7 +22,7 @@ const db = mysql.createPool({
   user: process.env.DB_USER,
   password: process.env.DB_PASSWORD,
   database: process.env.DB_NAME,
-  connectionLimit: 10,
+  connectionLimit: 3,
 });
 
 // Criar tabela se não existir
@@ -32,6 +32,7 @@ db.query(`CREATE TABLE IF NOT EXISTS doadores (
   endereco VARCHAR(255),
   celular VARCHAR(15) NOT NULL,
   nascimento DATE,
+  cpf VARCHAR(15),
   tipo_sanguineo VARCHAR(10) NOT NULL,
   genero VARCHAR(10),
   data_doacao DATE
@@ -60,11 +61,11 @@ app.post('/cadastro', (req, res) => {
 
   console.log('Dados recebidos no servidor:', req.body);
 
-  const { nome, endereco, celular, nascimento, tipo_sanguineo, genero } = req.body;
+  const { nome, endereco, celular, nascimento, cpf, tipo_sanguineo, genero } = req.body;
 
-  const query = `INSERT INTO doadores (nome, endereco, celular, nascimento, tipo_sanguineo, genero) VALUES (?, ?, ?, ?, ?, ?)`;
+  const query = `INSERT INTO doadores (nome, endereco, celular, nascimento, cpf, tipo_sanguineo, genero) VALUES (?, ?, ?, ?, ?, ?, ?)`;
 
-  db.query(query, [nome, endereco, celular, nascimento, tipo_sanguineo, genero], (err, result) => {
+  db.query(query, [nome, endereco, celular, nascimento, cpf, tipo_sanguineo, genero], (err, result) => {
     if (err) {
       console.error('Erro ao inserir dados:', err);
       res.status(500).send('Erro ao processar o cadastro.');

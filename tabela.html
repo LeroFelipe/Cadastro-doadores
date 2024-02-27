@@ -24,6 +24,7 @@
                         <th>Endereço</th>
                         <th>Celular</th>
                         <th>Data de Nascimento</th>
+                        <th>CPF</th>
                         <th>Idade</th>
                         <th>Tipo Sanguíneo</th>
                         <th>Gênero</th>
@@ -53,7 +54,8 @@
 
                     // Limpa a tabela
                     document.getElementById('tabelaDoadores').getElementsByTagName('tbody')[0].innerHTML = "";
-
+                    
+                    // Popula a tabela 
                     dados.forEach((doador) => {
 
                         const tabelaDoadores = document.getElementById('tabelaDoadores');
@@ -74,6 +76,7 @@
                                             <td>${doador.endereco}</td>
                                             <td>${doador.celular}</td>
                                             <td>${dataNascimentoBr}</td>
+                                            <td>${doador.cpf}</td>
                                             <td>${idadeDoador} Anos</td>
                                             <td>${doador.tipo_sanguineo}</td>
                                             <td>${doador.genero}</td>
@@ -287,7 +290,9 @@
                     const linhas = document.querySelectorAll('#tabelaDoadores tbody tr');
 
                     linhas.forEach(function (linha) {
-                        const textoLinha = linha.textContent.toLowerCase();
+                        const textoLinha = linha.textContent.toLowerCase().trim();
+
+                        // Verifica se o texto da linha inclui o valor do filtro
                         linha.style.display = textoLinha.includes(filtro) ? '' : 'none';
                     });
                 });

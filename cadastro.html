@@ -52,6 +52,14 @@
                     </div>
 
                     <div class="input-box">
+                        <div class="password-container">
+                            <label for="cpf">CPF</label>
+                            <input id="cpf" type="password" name="cpf">
+                            <span id="btnMostrarSenha">	&#128065;</span>
+                        </div>
+                    </div>
+
+                    <div class="input-box">
                         <label for="sangue">Tipo Sanguíneo</label>
                         <select id="sangue" name="sangue" required>
                             <option value="">Selecione...</option>
@@ -99,12 +107,14 @@
         function cadastrarDoador() {
 
             console.log("função cadastrarDoador executada")
+            console.log
 
             // Obtenha os valores dos campos do formulário
             var nome = document.getElementById("nome").value;
             var endereco = document.getElementById("endereco").value;
             var celular = document.getElementById("number").value;
             var dataNascimento = document.getElementById("nascimento").value;
+            var cpf = document.getElementById("cpf").value
             var sangue = document.getElementById("sangue").value;
             var generoInput = document.querySelector('input[name="gender"]:checked');
             var genero = generoInput ? generoInput.value : "";
@@ -123,6 +133,7 @@
                 tipo_sanguineo: sangue,
                 celular: celular,
                 nascimento: dataNascimento,
+                cpf: cpf,
                 genero: genero
             };
 
@@ -152,5 +163,19 @@
             });
         }
     </script>
+
+    <script>
+        const campoSenha = document.getElementById('cpf');
+        const btnMostrarSenha = document.getElementById('btnMostrarSenha');
+
+        btnMostrarSenha.addEventListener('click', function () {
+            if (campoSenha.type === 'password') {
+                campoSenha.type = 'text';
+            } else {
+                campoSenha.type = 'password';
+            }
+        });
+    </script>
+
 </body>
 </html>
