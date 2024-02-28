@@ -47,6 +47,7 @@
 
         <script>
             // Função para carregar dados do servidor e atualizar a tabela
+
             async function carregarDados() {
                 try {
                     const response = await fetch('/dados-doadores'); // Rota no servidor para obter dados
@@ -76,29 +77,29 @@
                                             <td>${doador.endereco}</td>
                                             <td>${doador.celular}</td>
                                             <td>${dataNascimentoBr}</td>
-                                            <td id="cpf${doador.id}" data-visivel="false">
-                                                <div id="cpfContent${doador.id}">******</div>
-                                                <span id="btn${doador.id}" class="icone" onclick="toggleCPF(${doador.id},${doador.cpf})">&#128065;</span>
+                                            <td data-visivel="false">
+                                                <div class="CPF">******</div>
+                                                <span class="icone" onclick="toggleCPF(${doador.id},${doador.cpf})">&#128065;</span>
                                             </td>
                                             <td>${idadeDoador} Anos</td>
                                             <td>${doador.tipo_sanguineo}</td>
                                             <td>${doador.genero}</td>
                                             <td><input type="date" name="dataDoacao" class="dataDoacao" required></td>
                                             <td><input type="text" oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '')" name="protocolo" class="protocolo" required></td>
-                                            <td style="color: ${CorProximaDoacao(doador.genero, idadeDoador, doador.data_doacao)}">
+                                            <td class="prxDoacao" style="color: ${CorProximaDoacao(doador.genero, idadeDoador, doador.data_doacao)}">
                                                 ${dataBrasil(calcularProximaDoacao(doador.genero, idadeDoador, doador.data_doacao))}
                                             </td>`;                                 
                 
                         // Adiciona uma célula para os botões
                         const buttonsCell = newRow.insertCell();
 
-                        // Cria uma div para os botões e a adiciona à célula
+                        // Cria uma div para os botões e adiciona à célula
                         const buttonsDiv = document.createElement('div');
                         buttonsDiv.classList.add('buttons-container');
                         buttonsCell.appendChild(buttonsDiv);
 
                         // Adiciona os botões na div
-                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="agendarDoador(${doador.id})">Protocolo</button>`);
+                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="agendarDoador(${doador.id}, '${doador.genero}', ${idadeDoador})">Incluir</button>`);
                         buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="editarDoador(${doador.id}, this)">Editar</button>`);
                         buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="excluirDoador(${doador.id})">Excluir</button>`);
 
@@ -123,21 +124,22 @@
                 }
             }
 
-            // Função para lidar com o agendar doador
+            // Função para lidar com inclusão da data da doação
 
-            function agendarDoador(doadorId) {
+            function agendarDoador(doadorId, genero, idade) {
 
                 // Encontrar o input de data correspondente à linha do doador com o id
                 const inputDate = document.querySelector(`tr[doador-id="${doadorId}"] .dataDoacao`);
                 const inputProt = document.querySelector(`tr[doador-id="${doadorId}"] .protocolo`);
-                
+
                 // Obter o valor da data e protocolo
                 const dataDoacao = inputDate.value; 
                 const protocolo = inputProt.value;
 
                 // Popup de confirmação
-                const confirmacao = window.confirm('Confirmar protocolo?');
+                const confirmacao = window.confirm('Confirmar inclusão de dados?');
 
+                // Enviar dados p/ servidor
                 if(confirmacao){
                     // Enviar a solicitação HTTP POST para a rota de agendamento do doador no backend
                     fetch(`/agendar-doador/${doadorId}`, {
@@ -150,15 +152,18 @@
                     .then(response => response.json())
                     .then(data => {
                         console.log(data.message);
+
                         // Adicionar lógica adicional, se necessário
                     })
                     .catch(error => {
                         console.error('Erro ao agendar doador:', error);
                     });
-
-                    location.reload();
                 }
                 
+                // Atualizar a célula 'Pŕoxima Doação'
+                const prxDoacao = document.querySelector(`tr[doador-id="${doadorId}"] .prxDoacao`);                
+                prxDoacao.textContent = `${dataBrasil(calcularProximaDoacao(genero, idade, dataDoacao))}`; 
+                prxDoacao.style.color =  `${CorProximaDoacao(genero, idade, dataDoacao)}`;             
             }
 
             //Função para calcular a próxima doação
@@ -211,19 +216,20 @@
             // Função para lidar com a edição do doador
 
             function editarDoador(doadorId, btnEditar) {
-                // Implementar a lógica de edição do doador usando o doadorId
-                console.log('Editar doador com ID:', doadorId);
                 btnEditar.innerText = 'Salvar';
                 btnEditar.style.backgroundColor = '#ff6868';
+                console.log('Editar doador com ID:', doadorId);
 
                 btnEditar.onclick = function (){
                     if (btnEditar.innerText == 'Salvar'){
                         btnEditar.innerText = 'Editar';            
-                        btnEditar.style.backgroundColor = '#c5c5c56c';
+                        btnEditar.style.backgroundColor = '#c5c5c56c';        
                     } else{
                         btnEditar.innerText = 'Salvar';
                         btnEditar.style.backgroundColor = '#ff6868';
-                    }                                       
+                        console.log('Editar doador com ID:', doadorId);
+                    }
+                                                         
                 }
             }
 
@@ -277,6 +283,7 @@
             }
 
             // Função para calcular a idade do Doador
+
             function calcularIdade(dataNascimento) {
                 const hoje = new Date();
                 const dataNascimentoObj = new Date(dataNascimento);
@@ -299,10 +306,11 @@
             }
 
             // Função para exibir e ocultar o CPF
+
             function toggleCPF(doadorId, doadorCPF) {
-                const divCPF = document.getElementById(`cpfContent${doadorId}`);
+                const divCPF = document.querySelector(`tr[doador-id="${doadorId}"] .CPF`);
+               // const divCPF = document.getElementById(`cpfContent${doadorId}`);
                 let visivel = divCPF.dataset.visivel === 'true';
-                console.log(divCPF, visivel, doadorCPF);
 
                 if (!visivel) {
                     // Torna o CPF visível

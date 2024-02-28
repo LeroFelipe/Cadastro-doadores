@@ -105,18 +105,15 @@
         // Função para enviar os dados do formulário para o servidor
         function cadastrarDoador() {
 
-            console.log("função cadastrarDoador executada")
-            console.log
-
             // Obtenha os valores dos campos do formulário
-            var nome = document.getElementById("nome").value;
-            var endereco = document.getElementById("endereco").value;
-            var celular = document.getElementById("number").value;
-            var dataNascimento = document.getElementById("nascimento").value;
-            var cpf = document.getElementById("cpf").value
-            var sangue = document.getElementById("sangue").value;
-            var generoInput = document.querySelector('input[name="gender"]:checked');
-            var genero = generoInput ? generoInput.value : "";
+            let nome = document.getElementById("nome").value;
+            let endereco = document.getElementById("endereco").value;
+            let celular = document.getElementById("number").value;
+            let dataNascimento = document.getElementById("nascimento").value;
+            let cpf = document.getElementById("cpf").value
+            let sangue = document.getElementById("sangue").value;
+            let generoInput = document.querySelector('input[name="gender"]:checked');
+            let genero = generoInput ? generoInput.value : "";
 
             // Valide os campos obrigatórios
             if (!nome || !celular || !dataNascimento ||!sangue || !genero) {
@@ -126,7 +123,7 @@
             }
             
             // Crie um objeto com os dados
-            var dados = {
+            let dados = {
                 nome: nome,
                 endereco: endereco,
                 tipo_sanguineo: sangue,
