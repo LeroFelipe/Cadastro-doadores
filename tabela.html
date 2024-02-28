@@ -64,12 +64,20 @@
 
                         const newRow = tbody.insertRow();
 
+                        let dataDoacaoLocal;
+
                         // Usando setAttribute para adicionar o atributo ao <tr>
                         newRow.setAttribute('doador-id', doador.id);
 
                         // Formata a data antes de inserir na tabela
                         const dataNascimentoBr = dataBrasil(formatarData(doador.nascimento));
-                        
+                        if (doador.data_doacao) {
+                            const dataDoacaoUTC = new Date(doador.data_doacao);
+                            dataDoacaoLocal = dataDoacaoUTC.toISOString().split('T')[0];
+                        }
+
+                        console.log(dataDoacaoLocal);
+             
                         const idadeDoador = calcularIdade(doador.nascimento);
 
                         // Adiciona as colunas com os dados do doador
@@ -77,8 +85,7 @@
                                             <td>${doador.endereco}</td>
                                             <td>${doador.celular}</td>
                                             <td>${dataNascimentoBr}</td>
-                                            <td data-visivel="false">
-                                                <div class="CPF">******</div>
+                                            <td><div class="CPF">******</div>
                                                 <span class="icone" onclick="toggleCPF(${doador.id},${doador.cpf})">&#128065;</span>
                                             </td>
                                             <td>${idadeDoador} Anos</td>
@@ -86,8 +93,8 @@
                                             <td>${doador.genero}</td>
                                             <td><input type="date" name="dataDoacao" class="dataDoacao" required></td>
                                             <td><input type="text" oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '')" name="protocolo" class="protocolo" required></td>
-                                            <td class="prxDoacao" style="color: ${CorProximaDoacao(doador.genero, idadeDoador, doador.data_doacao)}">
-                                                ${dataBrasil(calcularProximaDoacao(doador.genero, idadeDoador, doador.data_doacao))}
+                                            <td class="prxDoacao" style="color: ${CorProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal)}">
+                                                ${dataBrasil(calcularProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal))}
                                             </td>`;                                 
                 
                         // Adiciona uma célula para os botões
@@ -106,15 +113,11 @@
                         // Verifica se a data de doação não é nula antes de preencher o campo de data
                         const inputDate = newRow.querySelector('.dataDoacao');
                         const inputProt = newRow.querySelector('.protocolo');
-
-                        if (doador.data_doacao !== null) {
-                            const dataDoacaoUTC = new Date(doador.data_doacao);
-                            const dataDoacaoLocal = dataDoacaoUTC.toISOString().split('T')[0];
+                        if(dataDoacaoLocal){
                             inputDate.value = dataDoacaoLocal;
                         }
-                        if (doador.protocolo !== null){
-                            const protocolo = doador.protocolo;
-                            inputProt.value  = protocolo;
+                        if(doador.protocolo){
+                            inputProt.value  = doador.protocolo;
                         }
 
                     });
@@ -135,6 +138,8 @@
                 // Obter o valor da data e protocolo
                 const dataDoacao = inputDate.value; 
                 const protocolo = inputProt.value;
+
+                console.log(dataDoacao);
 
                 // Popup de confirmação
                 const confirmacao = window.confirm('Confirmar inclusão de dados?');
@@ -163,7 +168,7 @@
                 // Atualizar a célula 'Pŕoxima Doação'
                 const prxDoacao = document.querySelector(`tr[doador-id="${doadorId}"] .prxDoacao`);                
                 prxDoacao.textContent = `${dataBrasil(calcularProximaDoacao(genero, idade, dataDoacao))}`; 
-                prxDoacao.style.color =  `${CorProximaDoacao(genero, idade, dataDoacao)}`;             
+                prxDoacao.style.color = `${CorProximaDoacao(genero, idade, dataDoacao)}`;             
             }
 
             //Função para calcular a próxima doação
@@ -203,13 +208,10 @@
                 if (proximaDoacao !== 'a definir'){
                     if (proximaDoacao <= hoje) {
                         cor = '#23962c';
-                        
-
                     } else {
                         cor = '#ff6868'; // mudar para vermelho se a data ainda não chegou
                     }
-                }
-                
+                }                
                 return cor;
             }
 

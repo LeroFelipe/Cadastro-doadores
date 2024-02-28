@@ -32,7 +32,7 @@ db.query(`CREATE TABLE IF NOT EXISTS doadores (
   endereco VARCHAR(255),
   celular VARCHAR(15) NOT NULL,
   nascimento DATE,
-  cpf VARCHAR(15),
+  cpf VARCHAR(20),
   tipo_sanguineo VARCHAR(10) NOT NULL,
   genero VARCHAR(10),
   data_doacao DATE,
