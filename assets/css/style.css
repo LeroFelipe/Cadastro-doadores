@@ -18,7 +18,7 @@ body {
 .container {
     margin-top: 40px;
     width: 80%;
-    height: 80vh;
+    height: 90vh;
     display: flex;
     box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.212);
 }
@@ -356,8 +356,6 @@ input[type="number"] {
     -moz-appearance: textfield;
     appearance: textfield;
 }
-
-
 
 @media screen and (max-width: 1330px) {
     .form-image {
