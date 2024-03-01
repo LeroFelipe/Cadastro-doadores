@@ -22,19 +22,19 @@ const client = new MongoClient(uri,  {
 );
 
 // Servir conteúdo estático (HTML, CSS, imagens)
-app.use('/assets', express.static(path.join(__dirname, '../assets')));
+app.use('/assets', express.static(path.join(__dirname, '..', 'assets')));
 app.use(express.static(path.join(__dirname)));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, 'https://doadores.vercel.app/cadastro.html/login.html'));
+  res.sendFile(path.join(__dirname, '..', 'components', 'login.htm'));
 });
 
 app.get('/cadastro.html', (req, res) => {
-  res.sendFile(path.join(__dirname, '../cadastro.html'));
+  res.sendFile(path.join(__dirname, '..', 'components', 'cadastro.htm'));
 });
 
 app.get('/tabela.html', (req, res) => {
-  res.sendFile(path.join(__dirname, '../tabela.html'));
+  res.sendFile(path.join(__dirname, '..', 'components', 'tabela.htm'));
 });
 
 async function run() {
