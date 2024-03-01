@@ -28,6 +28,8 @@ async function run() {
     // Rota para receber dados do formulário
     app.post('/cadastro', async (req, res) => {
       try {
+
+        console.log("CHEGUEI AQUI!!!");
         const db = client.db();
         const collection = db.collection('doadores');
 
