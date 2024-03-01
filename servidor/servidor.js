@@ -1,6 +1,7 @@
 const express = require('express');
 require('dotenv').config();
 
+const app = express();
 const { MongoClient, ServerApiVersion } = require("mongodb");
 // Replace the placeholder with your Atlas connection string
 const uri = process.env.MONGODB_URI;
@@ -14,12 +15,14 @@ const client = new MongoClient(uri,  {
     }
 );
 
+app.use(express.json());
+
 async function run() {
   try {
-
-    // Connect the client to the server (optional starting in v4.7)
     await client.connect();
-  
+    console.log('Conectado ao MongoDB');
+
+
     const db = client.db("mymongodb");
     const coll = db.collection("doadores");
 
