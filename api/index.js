@@ -3,7 +3,7 @@ const path = require('path');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 8080;
+const port = process.env.PORT;
 
 const { MongoClient, ServerApiVersion } = require("mongodb");
 
