@@ -26,7 +26,7 @@ app.use('/assets', express.static(path.join(__dirname, '../assets')));
 app.use(express.static(path.join(__dirname)));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../login.html'));
+  res.sendFile(path.join(__dirname, '../index.html'));
 });
 
 app.get('/cadastro.html', (req, res) => {
