@@ -30,7 +30,7 @@ async function run() {
       try {
 
         console.log("CHEGUEI AQUI!!!");
-        const db = client.db();
+        const db = client.db('mymongodb');
         const collection = db.collection('doadores');
 
         // Obter dados do corpo da solicitação
@@ -48,6 +48,8 @@ async function run() {
           tipoSanguineo,
           genero,
         };
+
+        const doc2 = {teste: caralho};
 
         // Inserir documento na coleção
         const result = await collection.insertOne(doc);
