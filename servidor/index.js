@@ -26,7 +26,7 @@ app.use('/assets', express.static(path.join(__dirname, '../assets')));
 app.use(express.static(path.join(__dirname)));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '../login.html'));
+  res.sendFile(path.join(__dirname, 'https://doadores.vercel.app/cadastro.html/login.html'));
 });
 
 app.get('/cadastro.html', (req, res) => {
@@ -43,7 +43,7 @@ async function run() {
     console.log('Conectado ao MongoDB');
 
     // Rota para receber dados do formulário
-    app.post('/servidor/cadastro', async (req, res) => {
+    app.post('/cadastro', async (req, res) => {
       try {
 
         console.log("CHEGUEI AQUI!!!");
