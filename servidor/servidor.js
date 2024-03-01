@@ -1,4 +1,5 @@
 const express = require('express');
+const path = require('path');
 require('dotenv').config();
 
 const app = express();
@@ -19,6 +20,22 @@ const client = new MongoClient(uri,  {
         }
     }
 );
+
+// Servir conteúdo estático (HTML, CSS, imagens)
+app.use('/assets', express.static(path.join(__dirname, '../assets')));
+app.use(express.static(path.join(__dirname)));
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, '../index.html'));
+});
+
+app.get('/cadastro.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../cadastro.html'));
+});
+
+app.get('/tabela.html', (req, res) => {
+  res.sendFile(path.join(__dirname, '../tabela.html'));
+});
 
 async function run() {
   try {
@@ -49,8 +66,6 @@ async function run() {
           genero,
         };
 
-        const doc2 = {teste: caralho};
-
         // Inserir documento na coleção
         const result = await collection.insertOne(doc);
 
@@ -69,7 +84,7 @@ async function run() {
 
   } finally {
     // Ensures that the client will close when you finish/error
-    // client.close();
+    //client.close();
   }
 }
 run().catch(console.dir);
