@@ -2,8 +2,13 @@ const express = require('express');
 require('dotenv').config();
 
 const app = express();
+const port = process.env.PORT;
+
 const { MongoClient, ServerApiVersion } = require("mongodb");
-// Replace the placeholder with your Atlas connection string
+
+app.use(express.json());
+
+// Conectar ao MongoDB
 const uri = process.env.MONGODB_URI;
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri,  {
@@ -15,37 +20,52 @@ const client = new MongoClient(uri,  {
     }
 );
 
-app.use(express.json());
-
 async function run() {
   try {
     await client.connect();
     console.log('Conectado ao MongoDB');
 
+    // Rota para receber dados do formulário
+    app.post('/cadastro', async (req, res) => {
+      try {
+        const db = client.db();
+        const collection = db.collection('doadores');
 
-    const db = client.db("mymongodb");
-    const coll = db.collection("doadores");
+        // Obter dados do corpo da solicitação
+        const { nome, endereco, celular, dataNascimento, cpf, tipoSanguineo, genero } = req.body;
 
-    const doc = {
-      nome: "Exemplo",
-      endereco: "Rua Exemplo, 123",
-      celular: "123456789",
-      dataNascimento: "1990-01-01",
-      cpf: "123.456.789-00",
-      tipoSanguineo: "A+",
-      genero: "Masculino",
-      dataDoacao: "2024-02-29",
-      protocolo: "123ABC"
-    };
-    
-    const result = await coll.insertOne(doc);
-    console.log(
-      `A document was inserted with the _id: ${result.insertedId}`,
-    );
+        // Validar os dados recebidos conforme necessário
+
+        // Criar um documento
+        const doc = {
+          nome,
+          endereco,
+          celular,
+          dataNascimento,
+          cpf,
+          tipoSanguineo,
+          genero,
+        };
+
+        // Inserir documento na coleção
+        const result = await collection.insertOne(doc);
+
+        // Responder com sucesso
+        res.status(200).json({ message: 'Cadastro realizado com sucesso!', insertedId: result.insertedId });
+      } catch (error) {
+        console.error('Erro ao processar o cadastro:', error);
+        res.status(500).send('Erro ao processar o cadastro.');
+      }
+    });
+
+    // Iniciar o servidor
+    app.listen(port, () => {
+      console.log(`Servidor está rodando em http://localhost:${port}`);
+    });
 
   } finally {
     // Ensures that the client will close when you finish/error
-    await client.close();
+    // client.close();
   }
 }
 run().catch(console.dir);
