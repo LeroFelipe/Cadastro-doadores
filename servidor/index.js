@@ -22,7 +22,7 @@ const client = new MongoClient(uri,  {
 );
 
 // Servir conteúdo estático (HTML, CSS, imagens)
-app.use('/assets', express.static(path.join(__dirname, '../assets')));
+/*app.use('/assets', express.static(path.join(__dirname, '../assets')));
 app.use(express.static(path.join(__dirname)));
 
 app.get('/', (req, res) => {
@@ -35,7 +35,7 @@ app.get('/cadastro.html', (req, res) => {
 
 app.get('/tabela.html', (req, res) => {
   res.sendFile(path.join(__dirname, '../tabela.html'));
-});
+});*/
 
 async function run() {
   try {
@@ -43,7 +43,7 @@ async function run() {
     console.log('Conectado ao MongoDB');
 
     // Rota para receber dados do formulário
-    app.post('/cadastro', async (req, res) => {
+    app.post('/servidor/cadastro', async (req, res) => {
       try {
 
         console.log("CHEGUEI AQUI!!!");
