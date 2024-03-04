@@ -1,4 +1,3 @@
-const express = require('express');
 const path = require('path');
 require('dotenv').config();
 
@@ -16,7 +15,7 @@ const client = new MongoClient(uri,  {
         serverApi: {
             version: ServerApiVersion.v1,
             strict: true,
-            deprecationErrors: true,
+            deprecationErrors: true,a
         }
     }
 );
