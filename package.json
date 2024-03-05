@@ -1,8 +1,9 @@
 {
-  "name": "express",
+  "name": "doadores",
   "version": "1.0.0",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "vercel",
+    "dev": "vercel dev"
   },
   "keywords": [],
   "author": "",
