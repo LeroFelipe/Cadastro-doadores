@@ -50,7 +50,7 @@
 
             async function carregarDados() {
                 try {
-                    const response = await fetch('/dados-doadores'); // Rota no servidor para obter dados
+                    const response = await fetch('/api/read');
                     const dados = await response.json();
 
                     // Limpa a tabela
