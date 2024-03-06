@@ -6,7 +6,7 @@
   ],
   "routes": [
     { "src": "/api/(.*)", "dest": "/api/$1" },
-    { "src": "/api/write", "methods": ["POST"], "dest": "/api/write" },
+    { "src": "/api/", "methods": ["POST"], "dest": "/api/write.js" },
     { "src": "/(.*)", "dest": "/$1" }
   ]
 }
