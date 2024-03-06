@@ -38,6 +38,8 @@ module.exports = async (req, res) => {
         genero,
       };
 
+      console.log('Dados para inserção: ', doc);
+
       // Inserir documento na coleção
       const result = await collection.insertOne(doc);
 

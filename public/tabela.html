@@ -56,6 +56,8 @@
                     // Limpa a tabela
                     document.getElementById('tabelaDoadores').getElementsByTagName('tbody')[0].innerHTML = "";
                     
+                    let id = 1;
+
                     // Popula a tabela 
                     dados.forEach((doador) => {
 
@@ -67,16 +69,18 @@
                         let dataDoacaoLocal;
 
                         // Usando setAttribute para adicionar o atributo ao <tr>
-                        newRow.setAttribute('doador-id', doador.id);
+                        newRow.setAttribute('doador-id', id);
+
+                        console.log(doador.id);
 
                         // Formata a data antes de inserir na tabela
-                        const dataNascimentoBr = dataBrasil(formatarData(doador.nascimento));
+                        const dataNascimentoBr = dataBrasil(doador.dataNascimento);
                         if (doador.data_doacao) {
                             const dataDoacaoUTC = new Date(doador.data_doacao);
                             dataDoacaoLocal = dataDoacaoUTC.toISOString().split('T')[0];
                         }
                                      
-                        const idadeDoador = calcularIdade(doador.nascimento);
+                        const idadeDoador = calcularIdade(doador.dataNascimento);
 
                         // Adiciona as colunas com os dados do doador
                         newRow.innerHTML = `<td>${doador.nome}</td>
@@ -84,7 +88,7 @@
                                             <td>${doador.celular}</td>
                                             <td>${dataNascimentoBr}</td>
                                             <td><div class="CPF">******</div>
-                                                <span class="icone" onclick="toggleCPF(${doador.id},${doador.cpf})">&#128065;</span>
+                                                <span class="icone" onclick="toggleCPF(${id},${doador.cpf})">&#128065;</span>
                                             </td>
                                             <td>${idadeDoador} Anos</td>
                                             <td>${doador.tipo_sanguineo}</td>
@@ -117,6 +121,8 @@
                         if(doador.protocolo){
                             inputProt.value  = doador.protocolo;
                         }
+
+                        id++;
 
                     });
                     
@@ -271,7 +277,7 @@
             // Função para mudar o formato da data p/ DD/MM/AAAA
 
             function dataBrasil(dataString) {
-                const partes = dataString.split('/');
+                const partes = dataString.split('-');
                 if (partes.length === 3) {
                     // Verificar se há três partes (dia, mês, ano)
                     const data = `${partes[2]}/${partes[1]}/${partes[0]}`;

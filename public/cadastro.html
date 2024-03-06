@@ -109,14 +109,14 @@
             let nome = document.getElementById("nome").value;
             let endereco = document.getElementById("endereco").value;
             let celular = document.getElementById("number").value;
-            let dataNascimento = document.getElementById("nascimento").value;
+            let nascimento = document.getElementById("nascimento").value;
             let cpf = document.getElementById("cpf").value
             let sangue = document.getElementById("sangue").value;
             let generoInput = document.querySelector('input[name="gender"]:checked');
             let genero = generoInput ? generoInput.value : "";
 
             // Valide os campos obrigatórios
-            if (!nome || !celular || !dataNascimento ||!sangue || !genero) {
+            if (!nome || !celular || !nascimento ||!sangue || !genero) {
                 console.error('Erro: Preenchatodos  os campos obrigatórios');
                 alert('Todos os campos são obrigatórios!');
                 return;
@@ -126,10 +126,10 @@
             let dados = {
                 nome: nome,
                 endereco: endereco,
-                tipo_sanguineo: sangue,
                 celular: celular,
-                nascimento: dataNascimento,
+                dataNascimento: nascimento,
                 cpf: cpf,
+                tipoSanguineo: sangue,
                 genero: genero
             };
 
