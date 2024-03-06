@@ -4,14 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="/assets/img/icon.png"/>
-    <link rel="stylesheet" href="/assets/css/style.css">
+    <link rel="icon" type="image/x-icon" href="assets/img/icon.png"/>
+    <link rel="stylesheet" href="assets/css/style.css">
     <title>Formulário de cadastro</title>
 </head>
 <body>
     <div class="container">
         <div class="form-image">
-            <img src="/assets/img/undraw_medicine_b-1-ol.svg" alt="">
+            <img src="assets/img/undraw_medicine_b-1-ol.svg" alt="">
         </div>
 
         <div class="form">
@@ -19,7 +19,7 @@
 
                 <div class="close-page">
                     <a href="tabela.html" onclick="fecharPagina();">
-                        <img src="/assets/img/Close-icon.png" alt="Ícone de fechar página" style="width: 32px; height: 32px; cursor: pointer;">
+                        <img src="assets/img/Close-icon.png" alt="Ícone de fechar página" style="width: 32px; height: 32px; cursor: pointer;">
                     </a>
                 </div>
 
@@ -137,7 +137,7 @@
             console.log('Dados a serem enviados:', dados);
 
             // Faça uma solicitação AJAX para o servidor
-            fetch('/api/', {
+            fetch('/api/write', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
