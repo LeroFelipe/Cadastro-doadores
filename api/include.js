@@ -1,6 +1,6 @@
 require('dotenv').config();
 
-const { MongoClient, ServerApiVersion } = require("mongodb");
+const { MongoClient, ObjectId, ServerApiVersion } = require("mongodb");
 
 module.exports = async (req, res) => {
 
@@ -24,7 +24,10 @@ const uri = process.env.MONGODB_URI;
         const db = client.db('mymongodb');
         const collection = db.collection('doadores');
 
-        const query = { _id: doadorId };
+        // Converter o ID para o formato ObjectId
+        const objectIdDoadorId = new ObjectId(String(doadorId));
+
+        const query = { _id: objectIdDoadorId };
         const update = {
             $set: {
                 dataDoacao: dataDoacao,
@@ -32,11 +35,8 @@ const uri = process.env.MONGODB_URI;
             }
         };
 
-        collection.updateOne(query, update);
         // Realizar a operação de atualização
-        //const result =  await collection.updateOne(query, update);
-        //const result =  await collection.updateOne(query, update);
-        //console.log(query, update);
+        const result =  await collection.updateOne(query, update);
 
         // Responder com os dados atualizados
         res.status(200).json({ message: 'Informações atualizadas com sucesso!', result });

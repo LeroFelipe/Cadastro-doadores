@@ -73,8 +73,9 @@
 
                         // Formata a data antes de inserir na tabela
                         const dataNascimentoBr = dataBrasil(doador.dataNascimento);
-                        if (doador.data_doacao) {
-                            const dataDoacaoUTC = new Date(doador.data_doacao);
+
+                        if (doador.dataDoacao) {
+                            const dataDoacaoUTC = new Date(doador.dataDoacao);
                             dataDoacaoLocal = dataDoacaoUTC.toISOString().split('T')[0];
                         }
                                      
@@ -95,7 +96,7 @@
                                             <td><input type="text" oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '')" name="protocolo" class="protocolo" required></td>
                                             <td class="prxDoacao" style="color: ${CorProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal)}">
                                                 ${dataBrasil(calcularProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal))}
-                                            </td>`;                                 
+                                            </td>`;   
                 
                         // Adiciona uma célula para os botões
                         const buttonsCell = newRow.insertCell();

@@ -27,7 +27,6 @@ const uri = process.env.MONGODB_URI;
         // Converter o ID para o formato ObjectId
         const objectIdDoadorId = new ObjectId(String(doadorId));
 
-
         // Realizar a operação exclusão
         const result =  await collection.deleteOne({_id: objectIdDoadorId});
         console.log('DELETAR DOADOR ID: ', objectIdDoadorId);
