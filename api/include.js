@@ -25,8 +25,18 @@ const uri = process.env.MONGODB_URI;
         const db = client.db('mymongodb');
         const collection = db.collection('doadores');
 
+        const query = { _id: doadorId };
+        const update = {
+            $set: {
+                dataDoacao: dataDoacao,
+                protocolo: protocolo
+            }
+        };
+
         // Realizar a operação de atualização
-        const result = await collection.updateOne({ _id: '65e8e3a5cb4be23d18388428' }, { $set: { doacao: '10/10/10', prot:'SEXO'} });
+        const result =  await collection.updateOne({_id : 65e951}, {$set : {dataDoacao: 'teste', protocolo: 'teste'}});
+        //const result =  await collection.updateOne(query, update);
+        //console.log(query, update);
 
         // Responder com os dados atualizados
         res.status(200).json({ message: 'Informações atualizadas com sucesso!', result });

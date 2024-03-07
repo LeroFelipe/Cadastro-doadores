@@ -35,7 +35,7 @@ module.exports = async (req, res) => {
     dataNascimento,
     cpf,
     tipoSanguineo,
-    genero,
+    genero
     };
 
     console.log('Dados para inserção: ', doc);

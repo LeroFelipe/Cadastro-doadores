@@ -114,6 +114,8 @@
             let sangue = document.getElementById("sangue").value;
             let generoInput = document.querySelector('input[name="gender"]:checked');
             let genero = generoInput ? generoInput.value : "";
+            let dataDoacao = "2024-05-05";
+            let protocolo = "123456";
 
             // Valide os campos obrigatórios
             if (!nome || !celular || !nascimento ||!sangue || !genero) {
@@ -130,9 +132,7 @@
                 dataNascimento: nascimento,
                 cpf: cpf,
                 tipoSanguineo: sangue,
-                genero: genero,
-                dataDoacao: null,
-                protocolo: null
+                genero: genero
             };
 
             // Exiba os dados no console antes de enviar
