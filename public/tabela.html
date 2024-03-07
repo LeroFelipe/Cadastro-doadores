@@ -109,7 +109,7 @@
                         // Adiciona os botões na div
                         buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="agendarDoador('${doador._id}', '${doador.genero}', ${idadeDoador})">Incluir</button>`);
                         buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="editarDoador('${doador._id}', this)">Editar</button>`);
-                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="excluirDoador('${doador._id}')">Excluir</button>`);
+                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="excluirDoador('${doador._id}', '${doador.nome}')">Excluir</button>`);
 
                         // Verifica se a data de doação não é nula antes de preencher o campo de data
                         const inputDate = newRow.querySelector('.dataDoacao');
@@ -251,9 +251,9 @@
 
             // Função para lidar com a exclusão do doador
 
-            function excluirDoador(doadorId) {
+            function excluirDoador(doadorId, nome) {
                 // Popup de confirmação
-                const confirmacao = window.confirm('Você realmente deseja excluir esse doador?');
+                const confirmacao = window.confirm(`Você realmente deseja excluir esse doador?\n${nome}`);
 
                 // Se o usuário confirmar, prosseguir com a exclusão
                 if (confirmacao) {
@@ -376,7 +376,7 @@
     </div>
     <script>
         const token = localStorage.getItem('token');
-        console.log('TESTE, PASSEI AQUI!!!')
+        console.log('TESTE, PASSEI AQUI!!!', token);
       
         if (!token) {
           window.location.href = 'login.html';
