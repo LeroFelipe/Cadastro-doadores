@@ -253,9 +253,13 @@
 
                 // Se o usuário confirmar, prosseguir com a exclusão
                 if (confirmacao) {
-                    fetch(`/excluir-doador/${doadorId}`, {
+                    fetch(`/api/delete`, {
                         method: 'DELETE',
-                    })
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ doadorId }),
+                                })
                     .then(response => response.json())
                     .then(data => {
                         console.log(data.message);

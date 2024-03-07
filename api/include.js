@@ -6,7 +6,6 @@ module.exports = async (req, res) => {
 
     // Recuperar os parâmetros do corpo da solicitação
     const { doadorId, dataDoacao, protocolo } = req.body;
-    console.log(doadorId, dataDoacao, protocolo);
 
     // Conectar ao MongoDB
 const uri = process.env.MONGODB_URI;
@@ -33,8 +32,9 @@ const uri = process.env.MONGODB_URI;
             }
         };
 
+        collection.updateOne(query, update);
         // Realizar a operação de atualização
-        const result =  await collection.updateOne({_id : 65e951}, {$set : {dataDoacao: 'teste', protocolo: 'teste'}});
+        //const result =  await collection.updateOne(query, update);
         //const result =  await collection.updateOne(query, update);
         //console.log(query, update);
 
