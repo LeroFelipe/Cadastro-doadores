@@ -11,6 +11,7 @@
     "body-parser": "^1.20.2",
     "debug": "^4.3.4",
     "dotenv": "^16.4.5",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.3.0",
     "uuid": "^9.0.1"
   },

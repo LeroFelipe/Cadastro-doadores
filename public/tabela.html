@@ -73,6 +73,7 @@
 
                         // Formata a data antes de inserir na tabela
                         const dataNascimentoBr = dataBrasil(doador.dataNascimento);
+                        console.log(doador.dataNascimento, dataNascimentoBr);
 
                         if (doador.dataDoacao) {
                             const dataDoacaoUTC = new Date(doador.dataDoacao);
@@ -96,7 +97,7 @@
                                             <td><input type="text" oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '')" name="protocolo" class="protocolo" required></td>
                                             <td class="prxDoacao" style="color: ${CorProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal)}">
                                                 ${dataBrasil(calcularProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal))}
-                                            </td>`;   
+                                            </td>`;
                 
                         // Adiciona uma célula para os botões
                         const buttonsCell = newRow.insertCell();
@@ -244,6 +245,9 @@
                     }
                                                          
                 }
+
+                // LÓGICA DA EDIÇÂO
+
             }
 
             // Função para lidar com a exclusão do doador
@@ -289,14 +293,26 @@
             // Função para mudar o formato da data p/ DD/MM/AAAA
 
             function dataBrasil(dataString) {
-                const partes = dataString.split('-');
-                if (partes.length === 3) {
-                    // Verificar se há três partes (dia, mês, ano)
-                    const data = `${partes[2]}/${partes[1]}/${partes[0]}`;
-                    return data;
-                } else {
-                    return 'a definir';
+                // Verifica se a data usa o caractere '-' como separador
+                if (dataString.includes('-')) {
+                    const partes = dataString.split('-');
+                    if (partes.length === 3) {
+                        // Verificar se há três partes (dia, mês, ano)
+                        const data = `${partes[2]}/${partes[1]}/${partes[0]}`;
+                        return data;
+                    }
+                } else if (dataString.includes('/')) {
+                    // Se não for '-', verifica se a data usa o caractere '/' como separador
+                    const partes = dataString.split('/');
+                    if (partes.length === 3) {
+                        // Verificar se há três partes (dia, mês, ano)
+                        const data = `${partes[2]}/${partes[1]}/${partes[0]}`;
+                        return data;
+                    }
                 }
+
+                // Se não atender a nenhum dos formatos esperados, retorna 'a definir'
+                return 'a definir';
             }
 
             // Função para calcular a idade do Doador
@@ -325,7 +341,6 @@
             // Função para exibir e ocultar o CPF
 
             function toggleCPF(doadorId, doadorCPF) {
-                console.log(doadorId);
                 const divCPF = document.querySelector(`tr[doador-id="${doadorId}"] .CPF`);
                 let visivel = divCPF.dataset.visivel === 'true';
 
@@ -345,7 +360,7 @@
             window.onload = carregarDados;
         </script>
 
-        <script>
+        <script> // Filtro para a página
             document.getElementById('filtro').addEventListener('input', function () {
                     const filtro = this.value.toLowerCase();
                     const linhas = document.querySelectorAll('#tabelaDoadores tbody tr');
