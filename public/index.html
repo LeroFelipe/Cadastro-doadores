@@ -49,23 +49,27 @@
     </div>
 
     <script>
-        function validateLogin() {
-            var username = document.getElementById("usuario").value;
-            var password = document.getElementById("password").value;
-            var errorMessage = document.getElementById("error-message");
-
-            // Aqui você pode adicionar sua lógica de validação
-            if (username === "sebastiao" && password === "01020304") {
-                // Login bem-sucedido
-                errorMessage.textContent = ""; // Limpa a mensagem de erro
-                
-                // Redireciona para a página cadastro.html
-                window.location.href = "cadastro.html";
-            } else {
-                // Login falhou
-                errorMessage.textContent = "Nome de usuário ou senha inválidos.";
-            }
-        }
+        const validateLogin = async () => {
+          const usuario = document.getElementById('usuario').value;
+          const password = document.getElementById('password').value;
+      
+          const response = await fetch('/api/login', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ usuario, password }),
+          });
+      
+          const data = await response.json();
+      
+          if (response.ok) {
+            localStorage.setItem('token', data.token);
+            window.location.href = 'cadastro.html';
+          } else {
+            alert(data.message);
+          }
+        };
     </script>
 </body>
 </html>

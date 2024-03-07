@@ -73,7 +73,6 @@
 
                         // Formata a data antes de inserir na tabela
                         const dataNascimentoBr = dataBrasil(doador.dataNascimento);
-                        console.log(doador.dataNascimento, dataNascimentoBr);
 
                         if (doador.dataDoacao) {
                             const dataDoacaoUTC = new Date(doador.dataDoacao);
@@ -375,5 +374,13 @@
         </script>
 
     </div>
+    <script>
+        const token = localStorage.getItem('token');
+        console.log('TESTE, PASSEI AQUI!!!')
+      
+        if (!token) {
+          window.location.href = 'login.html';
+        }
+    </script>
 </body>
 </html>
