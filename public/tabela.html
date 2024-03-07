@@ -7,9 +7,25 @@
     <link rel="icon" type="image/x-icon" href="assets/img/icon.png"/>
     <link rel="stylesheet" href="assets/css/style.css">
     <title>Doadores cadastrados</title>
+
+    <script>
+        const token = localStorage.getItem('token');
+        console.log('TESTE, PASSEI AQUI!!!', token);
+      
+        if (!token) {
+          window.location.href = 'index.html';
+        }
+    </script>
 </head>
 <body>
     <div class="tabela">
+
+        <div class="close-page">
+            <a onclick="fecharPagina();">
+                <img src="assets/img/Close-icon.png" alt="Ícone de fechar página" style="width: 32px; height: 32px; cursor: pointer;">
+            </a>
+        </div>
+
         <div class="title">
             <h1>Doadores cadastrados</h1>
         </div>
@@ -268,7 +284,7 @@
                     .then(data => {
                         console.log(data.message);
                         // Atualize a página
-                        location.reload();
+                        //location.reload();
                     })
                     .catch(error => {
                         console.error('Erro ao excluir doador:', error);
@@ -354,6 +370,15 @@
                 // Atualiza o dataset.visivel
                 divCPF.dataset.visivel = visivel ? 'false' : 'true';
             }
+
+            // Função para Logout
+
+            function fecharPagina() {
+                console.log("teste");
+                const token = localStorage.getItem('token');
+                localStorage.removeItem('token');
+                window.location.href = 'index.html';
+            }
    
             // Chama a função para carregar dados quando a página é carregada
             window.onload = carregarDados;
@@ -374,13 +399,5 @@
         </script>
 
     </div>
-    <script>
-        const token = localStorage.getItem('token');
-        console.log('TESTE, PASSEI AQUI!!!', token);
-      
-        if (!token) {
-          window.location.href = 'login.html';
-        }
-    </script>
 </body>
 </html>

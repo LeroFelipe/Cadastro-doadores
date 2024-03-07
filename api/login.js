@@ -9,12 +9,10 @@ const users = [
 module.exports = async (req, res) => {
   const { usuario, password } = req.body;
 
-  console.log(usuario, password, process.env.JWT_SECRET);
-
   const user = users.find(u => u.usuario === usuario && u.password === password);
 
   if (user) {
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '5m' });
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, { expiresIn: '2m' });
     res.json({ token });
   } else {
     res.status(401).json({ message: 'Usuário ou senha incorretos!'});
