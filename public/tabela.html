@@ -69,9 +69,7 @@
                         let dataDoacaoLocal;
 
                         // Usando setAttribute para adicionar o atributo ao <tr>
-                        newRow.setAttribute('doador-id', id);
-
-                        console.log(doador.id);
+                        newRow.setAttribute('doador-id', doador._id);
 
                         // Formata a data antes de inserir na tabela
                         const dataNascimentoBr = dataBrasil(doador.dataNascimento);
@@ -88,10 +86,10 @@
                                             <td>${doador.celular}</td>
                                             <td>${dataNascimentoBr}</td>
                                             <td><div class="CPF">******</div>
-                                                <span class="icone" onclick="toggleCPF(${id},${doador.cpf})">&#128065;</span>
+                                                <span class="icone" onclick="toggleCPF('${doador._id}','${doador.cpf}')">&#128065;</span>
                                             </td>
                                             <td>${idadeDoador} Anos</td>
-                                            <td>${doador.tipo_sanguineo}</td>
+                                            <td>${doador.tipoSanguineo}</td>
                                             <td>${doador.genero}</td>
                                             <td><input type="date" name="dataDoacao" class="dataDoacao" required></td>
                                             <td><input type="text" oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '')" name="protocolo" class="protocolo" required></td>
@@ -108,9 +106,9 @@
                         buttonsCell.appendChild(buttonsDiv);
 
                         // Adiciona os botões na div
-                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="agendarDoador(${doador.id}, '${doador.genero}', ${idadeDoador})">Incluir</button>`);
-                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="editarDoador(${doador.id}, this)">Editar</button>`);
-                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="excluirDoador(${doador.id})">Excluir</button>`);
+                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="agendarDoador('${doador._id}', '${doador.genero}', ${idadeDoador})">Incluir</button>`);
+                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="editarDoador('${doador._id}', this)">Editar</button>`);
+                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="excluirDoador('${doador._id}')">Excluir</button>`);
 
                         // Verifica se a data de doação não é nula antes de preencher o campo de data
                         const inputDate = newRow.querySelector('.dataDoacao');
@@ -149,13 +147,22 @@
 
                     // Enviar dados p/ servidor
                     if(confirmacao){
+                        // Construir objeto com dados a serem enviados
+                        const dados = {
+                            doadorId: doadorId,
+                            dataDoacao: dataDoacao,
+                            protocolo: protocolo
+                        };
+
+                        console.log('DADOS À ENVIAR: ',dados);
+
                         // Enviar a solicitação HTTP POST para a rota de agendamento do doador no backend
-                        fetch(`/agendar-doador/${doadorId}`, {
+                        fetch(`/api/include`, {
                             method: 'POST',
                             headers: {
                                 'Content-Type': 'application/json',
                             },
-                            body: JSON.stringify({ dataDoacao , protocolo }|| null),
+                            body: JSON.stringify(dados),
                         })
                         .then(response => response.json())
                         .then(data => {
@@ -313,8 +320,8 @@
             // Função para exibir e ocultar o CPF
 
             function toggleCPF(doadorId, doadorCPF) {
+                console.log(doadorId);
                 const divCPF = document.querySelector(`tr[doador-id="${doadorId}"] .CPF`);
-               // const divCPF = document.getElementById(`cpfContent${doadorId}`);
                 let visivel = divCPF.dataset.visivel === 'true';
 
                 if (!visivel) {

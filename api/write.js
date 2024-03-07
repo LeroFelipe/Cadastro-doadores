@@ -14,40 +14,40 @@ module.exports = async (req, res) => {
   });
 
   try {
-    await client.connect();
-    console.log('Conectado ao MongoDB');
+  await client.connect();
+  console.log('Conectado ao MongoDB');
 
-    const db = client.db('mymongodb');
-    const collection = db.collection('doadores');
+  const db = client.db('mymongodb');
+  const collection = db.collection('doadores');
 
-    // Verificar se a solicitação é do tipo POST
-    if (req.method === 'POST') {
-      // Obter dados do corpo da solicitação
-      const { nome, endereco, celular, dataNascimento, cpf, tipoSanguineo, genero } = req.body;
+  // Verificar se a solicitação é do tipo POST
+  if (req.method === 'POST') {
+    // Obter dados do corpo da solicitação
+    const { nome, endereco, celular, dataNascimento, cpf, tipoSanguineo, genero } = req.body;
 
-      // Validar os dados recebidos conforme necessário
+    // Validar os dados recebidos conforme necessário
 
-      // Criar um documento
-      const doc = {
-        nome,
-        endereco,
-        celular,
-        dataNascimento,
-        cpf,
-        tipoSanguineo,
-        genero,
-      };
+    // Criar um documento
+    const doc = {
+    nome,
+    endereco,
+    celular,
+    dataNascimento,
+    cpf,
+    tipoSanguineo,
+    genero,
+    };
 
-      console.log('Dados para inserção: ', doc);
+    console.log('Dados para inserção: ', doc);
 
-      // Inserir documento na coleção
-      const result = await collection.insertOne(doc);
+    // Inserir documento na coleção
+    const result = await collection.insertOne(doc);
 
-      // Responder com sucesso
-      res.status(200).json({ message: 'Cadastro realizado com sucesso!', insertedId: result.insertedId });
-    } else {
-      // Caso contrário, responda com um erro de método não permitido
-      res.status(405).send('Método não permitido');
+    // Responder com sucesso
+    res.status(200).json({ message: 'Cadastro realizado com sucesso!', insertedId: result.insertedId });
+  } else {
+    // Caso contrário, responda com um erro de método não permitido
+    res.status(405).send('Método não permitido');
     }
   } catch (error) {
     console.error('Erro ao processar o cadastro:', error);

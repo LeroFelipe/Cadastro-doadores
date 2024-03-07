@@ -110,7 +110,7 @@
             let endereco = document.getElementById("endereco").value;
             let celular = document.getElementById("number").value;
             let nascimento = document.getElementById("nascimento").value;
-            let cpf = document.getElementById("cpf").value
+            let cpf = document.getElementById("cpf").value;
             let sangue = document.getElementById("sangue").value;
             let generoInput = document.querySelector('input[name="gender"]:checked');
             let genero = generoInput ? generoInput.value : "";
@@ -130,7 +130,9 @@
                 dataNascimento: nascimento,
                 cpf: cpf,
                 tipoSanguineo: sangue,
-                genero: genero
+                genero: genero,
+                dataDoacao: null,
+                protocolo: null
             };
 
             // Exiba os dados no console antes de enviar
