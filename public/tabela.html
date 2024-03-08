@@ -22,7 +22,7 @@
 
         <div class="close-page">
             <a onclick="fecharPagina();">
-                <img src="assets/img/Close-icon.png" alt="Ícone de fechar página" style="width: 32px; height: 32px; cursor: pointer;">
+                <img src="assets/img/logout-icon.png" alt="Ícone de fechar página" style="cursor: pointer;">
             </a>
         </div>
 
@@ -374,12 +374,15 @@
             // Função para Logout
 
             function fecharPagina() {
-                console.log("teste");
-                const token = localStorage.getItem('token');
-                localStorage.removeItem('token');
-                window.location.href = 'index.html';
-            }
-   
+                const confirmacao = window.confirm(`Realmente deseja sair?`);
+
+                if(confirmacao){
+                    console.log("teste");
+                    const token = localStorage.getItem('token');
+                    localStorage.removeItem('token');
+                    window.location.href = 'index.html';
+                }
+            }   
             // Chama a função para carregar dados quando a página é carregada
             window.onload = carregarDados;
         </script>
