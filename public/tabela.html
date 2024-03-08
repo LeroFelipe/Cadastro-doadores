@@ -9,9 +9,7 @@
     <title>Doadores cadastrados</title>
 
     <script>
-        const token = localStorage.getItem('token');
-        console.log('TESTE, PASSEI AQUI!!!', token);
-      
+        const token = localStorage.getItem('token');      
         if (!token) {
           window.location.href = 'index.html';
         }
@@ -22,7 +20,7 @@
 
         <div class="close-page">
             <a onclick="fecharPagina();">
-                <img src="assets/img/logout-icon.png" alt="Ícone de fechar página" style="cursor: pointer;">
+                <img src="assets/img/logout-icon.png" alt="Ícone de fechar página" style="cursor: pointer; width: 50px; height: 50px;">
             </a>
         </div>
 
@@ -98,16 +96,16 @@
                         const idadeDoador = calcularIdade(doador.dataNascimento);
 
                         // Adiciona as colunas com os dados do doador
-                        newRow.innerHTML = `<td>${doador.nome}</td>
-                                            <td>${doador.endereco}</td>
-                                            <td>${doador.celular}</td>
-                                            <td>${dataNascimentoBr}</td>
+                        newRow.innerHTML = `<td class="nome">${doador.nome}</td>
+                                            <td class="endereco">${doador.endereco}</td>
+                                            <td class="celular">${doador.celular}</td>
+                                            <td class="nascimento">${dataNascimentoBr}</td>
                                             <td><div class="CPF">******</div>
                                                 <span class="icone" onclick="toggleCPF('${doador._id}','${doador.cpf}')">&#128065;</span>
                                             </td>
                                             <td>${idadeDoador} Anos</td>
-                                            <td>${doador.tipoSanguineo}</td>
-                                            <td>${doador.genero}</td>
+                                            <td class="sangue">${doador.tipoSanguineo}</td>
+                                            <td class="genero">${doador.genero}</td>
                                             <td><input type="date" name="dataDoacao" class="dataDoacao" required></td>
                                             <td><input type="text" oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '')" name="protocolo" class="protocolo" required></td>
                                             <td class="prxDoacao" style="color: ${CorProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal)}">
@@ -245,24 +243,32 @@
             // Função para lidar com a edição do doador
 
             function editarDoador(doadorId, btnEditar) {
+
+                // Pegar referência dos dados
+                const nome = document.querySelector(`tr[doador-id="${doadorId}"] .nome`);
+                console.log(nome);
+
+                // Substituir os TDs por inputs
+                nome.innerHTML = `<a class="nome" onclick="salvarAlteracoes();" style="cursor: pointer;">${nome.innerText}</a>`;
+
                 btnEditar.innerText = 'Salvar';
                 btnEditar.style.backgroundColor = '#ff6868';
-                console.log('Editar doador com ID:', doadorId);
 
                 btnEditar.onclick = function (){
                     if (btnEditar.innerText == 'Salvar'){
                         btnEditar.innerText = 'Editar';            
-                        btnEditar.style.backgroundColor = '#c5c5c56c';        
+                        btnEditar.style.backgroundColor = '#c5c5c56c';
+    
                     } else{
                         btnEditar.innerText = 'Salvar';
                         btnEditar.style.backgroundColor = '#ff6868';
                         console.log('Editar doador com ID:', doadorId);
-                    }
-                                                         
+                    }                                   
                 }
+            }
 
-                // LÓGICA DA EDIÇÂO
-
+            function salvarAlteracoes() {
+                console.log('TESTE!');
             }
 
             // Função para lidar com a exclusão do doador

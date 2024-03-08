@@ -275,6 +275,7 @@ th, td {
     text-align: center;
     vertical-align: middle;
     border: 1px solid #ddd;
+    font-size: 0.85rem;
 }
 
 .icone {
@@ -396,15 +397,5 @@ input[type="number"] {
     }
     .gender-input {
         margin-top: 0.5rem;
-    }
-}
-
-/* Estilos para o modo escuro
-@media (prefers-color-scheme: dark) {
-    .tabela{
-        background-color: #7e7e7e;
-    }
-    th, td {
-        border: 1px solid #505050;
     }
 }
