@@ -219,7 +219,7 @@
                 let hoje = new Date();
                 hoje = formatarData(hoje);
 
-                if (proximaDoacao !== 'a definir'){
+                if (proximaDoacao){
                     if (formatarData(proximaDoacao) <= hoje) {
                         cor = '#23962c';
                     } else {
@@ -236,7 +236,6 @@
 
                 // Pegar referência dos dados
                 const nome = document.querySelector(`tr[doador-id="${doadorId}"] .nome`);
-                console.log(nome);
 
                 // Substituir os TDs por inputs
                 nome.innerHTML = `<a class="nome" onclick="salvarAlteracoes();" style="cursor: pointer;">${nome.innerText}</a>`;

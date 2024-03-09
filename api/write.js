@@ -25,8 +25,6 @@ module.exports = async (req, res) => {
     // Obter dados do corpo da solicitação
     const { nome, endereco, celular, dataNascimento, cpf, tipoSanguineo, genero } = req.body;
 
-    // Validar os dados recebidos conforme necessário
-
     // Criar um documento
     const doc = {
     nome,

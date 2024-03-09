@@ -127,9 +127,17 @@
 
             // Valide os campos obrigatórios
             if (!nome || !celular || !nascimento ||!sangue || !genero) {
-                console.error('Erro: Preenchatodos  os campos obrigatórios');
+                console.error('Erro: Preencha todos  os campos obrigatórios');
                 alert('Todos os campos são obrigatórios!');
                 return;
+            }
+
+            // Validar os dados recebidos
+            if (
+            !isStringValid(nome) ||
+            !isStringValid(endereco)
+            ){
+                alert('Não é permitido caracteres especiais!');
             }
             
             // Crie um objeto com os dados
@@ -167,6 +175,13 @@
                 console.error('Erro:', error);
                 // Lidar com o erros de acordo com os requisitos do projeto
             });
+        }
+
+        // Função para verificar se a string contém apenas caracteres permitidos
+        function isStringValid(str) {
+            // A expressão regular permite apenas letras, números, espaço, vírgula, ponto, e traço
+            const regex = /^[a-zA-Z0-9,.\s-]+$/;
+            return regex.test(str);
         }
 
     </script>
