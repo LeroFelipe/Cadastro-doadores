@@ -18,10 +18,10 @@
 <body>
     <div class="tabela">
 
-        <div class="close-page">
-            <a onclick="sair();">
-                <img src="assets/img/logout-icon.png" alt="Ícone de fechar página" style="cursor: pointer; width: 50px; height: 50px;">
-            </a>
+        <div class="close-container">
+            <div class="close-page" onclick="sair()">
+                <img src="assets/img/logout-icon.png" alt="Fechar página">
+            </div>
         </div>
 
         <div class="title">
@@ -31,6 +31,8 @@
         <!-- Estrutura da tabela -->
         <div class="tabela-container">
             <input type="text" id="filtro" placeholder="Filtrar">
+            <span class="iconeFiltro" onclick="" >👍</span>
+            <span class="iconeFiltro" onclick="" >👎</span>
             <table id="tabelaDoadores">
                 <thead>
                     <tr>

@@ -220,6 +220,23 @@ form{
 
 /* Estilos da TABELA*/
 
+.close-container {
+    display: flex;
+    justify-content: flex-end;
+}
+.close-page {
+    cursor: pointer;
+    width: 50px;
+    height: 50px;
+    transition: transform 0.3s ease, font-size 0.3s ease;
+    
+}
+
+.close-page:hover {
+    transform: scale(1.6);
+    font-size: 1.6em;
+}
+
 .tabela .title {
     display: flex;
     justify-content: center;
@@ -253,6 +270,17 @@ form{
 
 #filtro:hover {
     color: #141414;
+}
+
+.iconeFiltro {
+    cursor: pointer;
+    transition: transform 0.3s ease, font-size 0.3s ease;
+    margin-left: 10px;
+}
+
+.iconeFiltro:hover {
+    transform: scale(1.6);
+    font-size: 1.6em;
 }
 
 table{
