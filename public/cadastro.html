@@ -132,6 +132,7 @@
             // Validar os dados recebidos
             if (!isStringValid(nome) || !isStringValid(endereco)){
                 alert('Não é permitido caracteres especiais!');
+                return;
             }
             
             // Crie um objeto com os dados
@@ -172,10 +173,10 @@
         }
 
         // Função para verificar se a string contém apenas caracteres permitidos
-        function isStringValid(str) {
+        function isStringValid(texto) {
             // A expressão regular permite apenas letras, números, espaço, vírgula, ponto, e traço
-            const regex = /^[a-zA-Z0-9,.\s-]+$/;
-            return regex.test(str);
+            const regex = /^[a-zA-Z0-9,.\s-\^~áàâãéèêíìîóòôõúùûýỳŷÁÀÂÃÉÈÊÍÌÎÓÒÔÕÚÙÛÝỲŶ]+$/;
+            return regex.test(texto);
         }
 
     </script>

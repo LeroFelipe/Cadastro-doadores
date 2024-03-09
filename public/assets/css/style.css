@@ -275,7 +275,7 @@ form{
 .iconeFiltro {
     cursor: pointer;
     transition: transform 0.3s ease, font-size 0.3s ease;
-    margin-left: 10px;
+    margin-left: 6px;
 }
 
 .iconeFiltro:hover {

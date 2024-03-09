@@ -393,7 +393,7 @@
             function aplicarFiltro(filtro) {
                 const linhas = document.querySelectorAll('#tabelaDoadores tbody tr');
 
-                linhas.forEach(function (linha) {
+                linhas.forEach((linha) => {
                     const textoLinha = linha.textContent.toLowerCase().trim();
 
                     // Verifica se o texto da linha inclui o valor do filtro
