@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <title>Doadores cadastrados</title>
 
-    <script>
+   <script>
         const token = localStorage.getItem('token');      
         if (!token) {
           window.location.href = 'index.html';
@@ -31,8 +31,9 @@
         <!-- Estrutura da tabela -->
         <div class="tabela-container">
             <input type="text" id="filtro" placeholder="Filtrar">
-            <span class="iconeFiltro" onclick="" >👍</span>
-            <span class="iconeFiltro" onclick="" >👎</span>
+            <span class="iconeFiltro" onclick="aplicarFiltro('👍')" >👍</span>
+            <span class="iconeFiltro" onclick="aplicarFiltro('👎')" >👎</span>
+            <span class="iconeFiltro" onclick="aplicarFiltro('')" >🚫</span>
             <table id="tabelaDoadores">
                 <thead>
                     <tr>
@@ -268,7 +269,7 @@
 
             function excluirDoador(doadorId, nome) {
                 // Popup de confirmação
-                const confirmacao = window.confirm(`Você realmente deseja excluir esse doador?\n${nome}`);
+                const confirmacao = window.confirm(`Você realmente deseja excluir o doador:\n${nome} ?`);
 
                 // Se o usuário confirmar, prosseguir com a exclusão
                 if (confirmacao) {
@@ -388,18 +389,25 @@
             window.onload = carregarDados;
         </script>
 
-        <script> // Filtro para a página
-            document.getElementById('filtro').addEventListener('input', function () {
-                    const filtro = this.value.toLowerCase();
-                    const linhas = document.querySelectorAll('#tabelaDoadores tbody tr');
+        <script>
+            function aplicarFiltro(filtro) {
+                const linhas = document.querySelectorAll('#tabelaDoadores tbody tr');
 
-                    linhas.forEach(function (linha) {
-                        const textoLinha = linha.textContent.toLowerCase().trim();
+                linhas.forEach(function (linha) {
+                    const textoLinha = linha.textContent.toLowerCase().trim();
 
-                        // Verifica se o texto da linha inclui o valor do filtro
-                        linha.style.display = textoLinha.includes(filtro) ? '' : 'none';
-                    });
+                    // Verifica se o texto da linha inclui o valor do filtro
+                    linha.style.display = textoLinha.includes(filtro) ? '' : 'none';
                 });
+            }
+
+            // Adiciona o evento de input ao elemento com ID 'filtro'
+            document.getElementById('filtro').addEventListener('input', function () {
+                const filtro = this.value.toLowerCase();
+
+                // Chama a função de filtro, passando o texto do filtro
+                aplicarFiltro(filtro);
+            });
         </script>
 
     </div>

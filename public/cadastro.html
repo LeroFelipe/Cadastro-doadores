@@ -25,7 +25,7 @@
         <div class="form">
             <form action="#">
 
-                <div class="close-page">
+                <div class="fechar" style="display: flex; justify-content: flex-end;">
                     <a href="tabela.html" onclick="fecharPagina();">
                         <img src="assets/img/Close-icon.png" alt="Ícone de fechar página" style="width: 32px; height: 32px; cursor: pointer;">
                     </a>
@@ -34,8 +34,7 @@
                 <div class="form-header">
                     <div class="title">
                         <h1>Cadastrar doador</h1>
-                    </div>
-                   
+                    </div>                   
                 </div>
 
                 <div class="input-group">
@@ -122,8 +121,6 @@
             let sangue = document.getElementById("sangue").value;
             let generoInput = document.querySelector('input[name="gender"]:checked');
             let genero = generoInput ? generoInput.value : "";
-            let dataDoacao = "2024-05-05";
-            let protocolo = "123456";
 
             // Valide os campos obrigatórios
             if (!nome || !celular || !nascimento ||!sangue || !genero) {
@@ -133,10 +130,7 @@
             }
 
             // Validar os dados recebidos
-            if (
-            !isStringValid(nome) ||
-            !isStringValid(endereco)
-            ){
+            if (!isStringValid(nome) || !isStringValid(endereco)){
                 alert('Não é permitido caracteres especiais!');
             }
             
