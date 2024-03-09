@@ -108,10 +108,10 @@
                                             <td class="genero">${doador.genero}</td>
                                             <td><input type="date" name="dataDoacao" class="dataDoacao" required></td>
                                             <td><input type="text" oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '')" name="protocolo" class="protocolo" required></td>
-                                            <td class="prxDoacao" style="color: ${CorProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal)}">
-                                                ${dataBrasil(calcularProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal))}
+                                            <td class="prxDoacao" style="color: ${calcularProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal).cor}">
+                                                ${dataBrasil(calcularProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal).data)}
                                             </td>`;
-                
+                        
                         // Adiciona uma célula para os botões
                         const buttonsCell = newRow.insertCell();
 
@@ -169,8 +169,6 @@
                             protocolo: protocolo
                         };
 
-                        console.log('DADOS À ENVIAR: ',dados);
-
                         // Enviar a solicitação HTTP POST para a rota de agendamento do doador no backend
                         fetch(`/api/include`, {
                             method: 'POST',
@@ -192,11 +190,11 @@
                 
                 // Atualizar a célula 'Pŕoxima Doação'
                 const prxDoacao = document.querySelector(`tr[doador-id="${doadorId}"] .prxDoacao`);                
-                prxDoacao.textContent = `${dataBrasil(calcularProximaDoacao(genero, idade, dataDoacao))}`; 
-                prxDoacao.style.color = `${CorProximaDoacao(genero, idade, dataDoacao)}`;             
+                prxDoacao.textContent = `${dataBrasil(calcularProximaDoacao(genero, idade, dataDoacao).data)}`; 
+                prxDoacao.style.color = `${calcularProximaDoacao(genero, idade, dataDoacao).cor}`;             
             }
 
-            //Função para calcular a próxima doação
+            //Função para calcular a próxima doação e cor da data
 
             function calcularProximaDoacao(genero, idadeDoador, dataDoacao){
                 let proximaDoacao;
@@ -217,27 +215,19 @@
                     proximaDoacao = new Date(dataDoacaoObj.getTime() + 211 * 24 * 60 * 1000 * 60); // 210 dias em milissegundos
                 }
 
-                return proximaDoacao ? formatarData(proximaDoacao) : 'a definir';
-            }
-
-            //Função para alterar a cor da data da próxima doação
-
-            function CorProximaDoacao(genero, idadeDoador, dataDoacao) {
-
-                let cor = 'black'; // cor padrão
-
-                let proximaDoacao = calcularProximaDoacao(genero, idadeDoador, dataDoacao);
+                let cor = 'black'; 
                 let hoje = new Date();
-                hoje = formatarData(hoje)
-              
+                hoje = formatarData(hoje);
+
                 if (proximaDoacao !== 'a definir'){
-                    if (proximaDoacao <= hoje) {
+                    if (formatarData(proximaDoacao) <= hoje) {
                         cor = '#23962c';
                     } else {
                         cor = '#ff6868'; // mudar para vermelho se a data ainda não chegou
                     }
                 }                
-                return cor;
+
+                return { data: proximaDoacao ? formatarData(proximaDoacao) : 'a definir', cor: cor};
             }
 
             // Função para lidar com a edição do doador
