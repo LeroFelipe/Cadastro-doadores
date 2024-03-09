@@ -19,7 +19,7 @@
     <div class="tabela">
 
         <div class="close-page">
-            <a onclick="fecharPagina();">
+            <a onclick="sair();">
                 <img src="assets/img/logout-icon.png" alt="Ícone de fechar página" style="cursor: pointer; width: 50px; height: 50px;">
             </a>
         </div>
@@ -110,6 +110,7 @@
                                             <td><input type="text" oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '')" name="protocolo" class="protocolo" required></td>
                                             <td class="prxDoacao" style="color: ${calcularProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal).cor}">
                                                 ${dataBrasil(calcularProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal).data)}
+                                                ${calcularProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal).cor === '#23962c' ? ' 👍' : ' 👎'}
                                             </td>`;
                         
                         // Adiciona uma célula para os botões
@@ -190,7 +191,8 @@
                 
                 // Atualizar a célula 'Pŕoxima Doação'
                 const prxDoacao = document.querySelector(`tr[doador-id="${doadorId}"] .prxDoacao`);                
-                prxDoacao.textContent = `${dataBrasil(calcularProximaDoacao(genero, idade, dataDoacao).data)}`; 
+                prxDoacao.textContent = `${dataBrasil(calcularProximaDoacao(genero, idade, dataDoacao).data)}
+                                            ${calcularProximaDoacao(genero, idade, dataDoacao).cor === '#23962c' ? ' 👍' : ' 👎'}`; 
                 prxDoacao.style.color = `${calcularProximaDoacao(genero, idade, dataDoacao).cor}`;             
             }
 
@@ -368,7 +370,7 @@
 
             // Função para Logout
 
-            function fecharPagina() {
+            function sair() {
                 const confirmacao = window.confirm(`Realmente deseja sair?`);
 
                 if(confirmacao){
@@ -378,7 +380,9 @@
                     window.location.href = 'index.html';
                 }
             }   
+            
             // Chama a função para carregar dados quando a página é carregada
+
             window.onload = carregarDados;
         </script>
 
