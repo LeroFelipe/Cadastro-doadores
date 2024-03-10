@@ -244,78 +244,53 @@
                     tornarClicavel(elemento);
                 });
 
+                console.log("TESTE 0");
                 btnEditar.innerText = 'Salvar';
                 btnEditar.style.backgroundColor = '#ff6868';
 
-                btnEditar.addEventListener('click', function () {
-                    if (btnEditar.innerText === 'Salvar') {
-                        btnEditar.innerText = 'Editar';
-                        btnEditar.style.backgroundColor = '#c5c5c56c';
-                        removerListeners(campos, doadorId);
-                        tornarCamposTexto(campos, doadorId);
-                    } else {
+                btnEditar.onclick = function (){
+                    if (btnEditar.innerText == 'Salvar'){
+                        btnEditar.innerText = 'Editar';            
+                        btnEditar.style.backgroundColor = '#c5c5c56c'; 
+                        console.log("TESTE 1");       
+                    } else{
                         btnEditar.innerText = 'Salvar';
                         btnEditar.style.backgroundColor = '#ff6868';
-                        adicionarListeners(campos, doadorId);
+                        console.log("TESTE 2");
                     }
-                });
-            };
-
-            function tornarCamposTexto(campos, doadorId) {
-                campos.forEach(function (campo) {
-                    const elemento = document.querySelector(`tr[doador-id="${doadorId}"] .${campo} input`);
-                    
-                    if (elemento) {
-                        const valorInput = elemento.value;
-                        const novoElemento = document.createElement('a');
-                        novoElemento.className = elemento.classList.value;
-                        novoElemento.style.cursor = 'pointer';
-                        novoElemento.textContent = valorInput;
-
-                        elemento.parentNode.replaceChild(novoElemento, elemento);
-                        tornarClicavel(novoElemento.parentNode);
-                    }
-                });
+                                                         
+                }
             };
 
             function tornarClicavel(elemento) {
+                console.log(elemento);
+
+
                 elemento.style.cursor = 'pointer';
                 elemento.addEventListener('click', function () {
-                    substituirPorInput(elemento);
-                });
-            };
+                    const valorOriginal = elemento.textContent;
+                    elemento.innerHTML = ''; // Limpa o conteúdo do elemento
 
-            function substituirPorInput(elemento) {
-                const valorOriginal = elemento.textContent;
-                elemento.innerHTML = ''; // Limpa o conteúdo do elemento
+                    const inputElement = document.createElement('input');
+                    inputElement.value = valorOriginal;
 
-                const inputElement = document.createElement('input');
-                inputElement.type = 'text';
-                inputElement.value = valorOriginal;
+                    // Verificar o tipo de elemento
+                    if (elemento.classList.contains('celular') || elemento.classList.contains('CPF') ) {
+                        inputElement.type = 'number';
+                    } else if (elemento.classList.contains('nascimento')){
+                        inputElement.type = 'date';
+                    } else {
+                        inputElement.type = 'text'
+                    }
 
-                elemento.appendChild(inputElement);
+                    elemento.appendChild(inputElement);
 
-                inputElement.addEventListener('blur', function () {
-                    const novoValor = this.value;
-                    elemento.textContent = novoValor;
-                    tornarClicavel(elemento);
-                });
+                    inputElement.addEventListener('blur', function () {
+                        const novoValor = this.value;
+                        elemento.textContent = novoValor;
+                    });
 
-                inputElement.focus(); // Dá foco ao input
-            };
-
-            function adicionarListeners(campos, doadorId) {
-                campos.forEach(function (campo) {
-                    const elemento = document.querySelector(`tr[doador-id="${doadorId}"] .${campo}`);
-                    tornarClicavel(elemento);
-                });
-            };
-
-            function removerListeners(campos, doadorId) {
-                campos.forEach(function (campo) {
-                    const elemento = document.querySelector(`tr[doador-id="${doadorId}"] .${campo}`);
-                    elemento.style.cursor = '';
-                    elemento.removeEventListener('click', function () {});
+                    inputElement.focus(); // Dá foco ao input
                 });
             };
 
