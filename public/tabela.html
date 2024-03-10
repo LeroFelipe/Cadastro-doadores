@@ -42,9 +42,9 @@
                         <th>Celular</th>
                         <th>Data de Nascimento</th>
                         <th>CPF</th>
-                        <th>Idade</th>
                         <th>Tipo Sanguíneo</th>
                         <th>Gênero</th>
+                        <th>Idade</th>
                         <th>Data da Doação</th>
                         <th>Protocolo</th>
                         <th>Próxima Doação</th>
@@ -59,7 +59,6 @@
         <!-- Botão para voltar para a página de cadastro -->
         <div class="botao-cadastro">
             <button type="button" onclick="window.location.href='cadastro.html'">Cadastro</button>
-            <!-- <button><a href="cadastro.html">Cadastro</a></button> -->
         </div>
 
         <script>
@@ -106,9 +105,9 @@
                                             <td><div class="CPF">******</div>
                                                 <span class="icone" onclick="toggleCPF('${doador._id}','${doador.cpf}')">&#128065;</span>
                                             </td>
-                                            <td>${idadeDoador} Anos</td>
                                             <td class="sangue">${doador.tipoSanguineo}</td>
                                             <td class="genero">${doador.genero}</td>
+                                            <td>${idadeDoador} Anos</td>
                                             <td><input type="date" name="dataDoacao" class="dataDoacao" required></td>
                                             <td><input type="text" oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '')" name="protocolo" class="protocolo" required></td>
                                             <td class="prxDoacao" style="color: ${calcularProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal).cor}">
@@ -146,7 +145,7 @@
                 } catch (error) {
                     console.error('Erro ao carregar dados:', error);
                 }
-            }
+            };
 
             // Função para lidar com inclusão da data da doação
 
@@ -197,7 +196,7 @@
                 prxDoacao.textContent = `${dataBrasil(calcularProximaDoacao(genero, idade, dataDoacao).data)}
                                             ${calcularProximaDoacao(genero, idade, dataDoacao).cor === '#23962c' ? ' 👍' : ' 👎'}`; 
                 prxDoacao.style.color = `${calcularProximaDoacao(genero, idade, dataDoacao).cor}`;             
-            }
+            };
 
             //Função para calcular a próxima doação e cor da data
 
@@ -233,41 +232,100 @@
                 }                
 
                 return { data: proximaDoacao ? formatarData(proximaDoacao) : 'a definir', cor: cor};
-            }
+            };
 
-            // Função para lidar com a edição do doador
+            // Funções para lidar com a edição de doadores
 
             function editarDoador(doadorId, btnEditar) {
+                const campos = ['nome', 'endereco', 'celular', 'nascimento', 'CPF', 'sangue', 'genero'];
 
-                // Pegar referência dos dados
-                const nome = document.querySelector(`tr[doador-id="${doadorId}"] .nome`);
-
-                // Substituir os TDs por inputs
-                nome.innerHTML = `<a class="nome" onclick="salvarAlteracoes();" style="cursor: pointer;">${nome.innerText}</a>`;
+                campos.forEach(function (campo) {
+                    const elemento = document.querySelector(`tr[doador-id="${doadorId}"] .${campo}`);
+                    tornarClicavel(elemento);
+                });
 
                 btnEditar.innerText = 'Salvar';
                 btnEditar.style.backgroundColor = '#ff6868';
 
-                btnEditar.onclick = function (){
-                    if (btnEditar.innerText == 'Salvar'){
-                        btnEditar.innerText = 'Editar';            
+                btnEditar.addEventListener('click', function () {
+                    if (btnEditar.innerText === 'Salvar') {
+                        btnEditar.innerText = 'Editar';
                         btnEditar.style.backgroundColor = '#c5c5c56c';
-    
-                    } else{
+                        removerListeners(campos, doadorId);
+                        tornarCamposTexto(campos, doadorId);
+                    } else {
                         btnEditar.innerText = 'Salvar';
                         btnEditar.style.backgroundColor = '#ff6868';
-                        console.log('Editar doador com ID:', doadorId);
-                    }                                   
-                }
-            }
+                        adicionarListeners(campos, doadorId);
+                    }
+                });
+            };
 
-            function salvarAlteracoes() {
-                console.log('TESTE!');
-            }
+            function tornarCamposTexto(campos, doadorId) {
+                campos.forEach(function (campo) {
+                    const elemento = document.querySelector(`tr[doador-id="${doadorId}"] .${campo} input`);
+                    
+                    if (elemento) {
+                        const valorInput = elemento.value;
+                        const novoElemento = document.createElement('a');
+                        novoElemento.className = elemento.classList.value;
+                        novoElemento.style.cursor = 'pointer';
+                        novoElemento.textContent = valorInput;
+
+                        elemento.parentNode.replaceChild(novoElemento, elemento);
+                        tornarClicavel(novoElemento.parentNode);
+                    }
+                });
+            };
+
+            function tornarClicavel(elemento) {
+                elemento.style.cursor = 'pointer';
+                elemento.addEventListener('click', function () {
+                    substituirPorInput(elemento);
+                });
+            };
+
+            function substituirPorInput(elemento) {
+                const valorOriginal = elemento.textContent;
+                elemento.innerHTML = ''; // Limpa o conteúdo do elemento
+
+                const inputElement = document.createElement('input');
+                inputElement.type = 'text';
+                inputElement.value = valorOriginal;
+
+                elemento.appendChild(inputElement);
+
+                inputElement.addEventListener('blur', function () {
+                    const novoValor = this.value;
+                    elemento.textContent = novoValor;
+                    tornarClicavel(elemento);
+                });
+
+                inputElement.focus(); // Dá foco ao input
+            };
+
+            function adicionarListeners(campos, doadorId) {
+                campos.forEach(function (campo) {
+                    const elemento = document.querySelector(`tr[doador-id="${doadorId}"] .${campo}`);
+                    tornarClicavel(elemento);
+                });
+            };
+
+            function removerListeners(campos, doadorId) {
+                campos.forEach(function (campo) {
+                    const elemento = document.querySelector(`tr[doador-id="${doadorId}"] .${campo}`);
+                    elemento.style.cursor = '';
+                    elemento.removeEventListener('click', function () {});
+                });
+            };
 
             // Função para lidar com a exclusão do doador
 
             function excluirDoador(doadorId, nome) {
+
+                // Encontrar a linha pelo atributo doador-id
+                const linha = document.querySelector(`tr[doador-id="${doadorId}"]`);
+
                 // Popup de confirmação
                 const confirmacao = window.confirm(`Você realmente deseja excluir o doador:\n${nome} ?`);
 
@@ -283,8 +341,8 @@
                     .then(response => response.json())
                     .then(data => {
                         console.log(data.message);
-                        // Atualize a página
-                        //location.reload();
+                        // Atualizar a tabela escondendo a linha 
+                        linha.style.display = "none";
                     })
                     .catch(error => {
                         console.error('Erro ao excluir doador:', error);
@@ -293,9 +351,9 @@
                 } else {
                     console.log('Exclusão cancelada pelo usuário.');
                 }
-            }
+            };
 
-            // Função para formatar a data no formato dd/mm/aaaa
+            // Função para formatar a data no formato aaaa/mm/dd
 
             function formatarData(data) {
                 const dataObj = new Date(data);
@@ -303,7 +361,7 @@
                 const mes = String(dataObj.getMonth() + 1).padStart(2, '0');
                 const ano = dataObj.getFullYear();
                 return `${ano}/${mes}/${dia}`;
-            }   
+            };
             
             // Função para mudar o formato da data p/ DD/MM/AAAA
 
@@ -328,7 +386,7 @@
 
                 // Se não atender a nenhum dos formatos esperados, retorna 'a definir'
                 return 'a definir';
-            }
+            };
 
             // Função para calcular a idade do Doador
 
@@ -351,7 +409,7 @@
                 }
 
                 return idade;
-            }
+            };
 
             // Função para exibir e ocultar o CPF
 
@@ -369,7 +427,7 @@
 
                 // Atualiza o dataset.visivel
                 divCPF.dataset.visivel = visivel ? 'false' : 'true';
-            }
+            };
 
             // Função para Logout
 
@@ -382,14 +440,14 @@
                     localStorage.removeItem('token');
                     window.location.href = 'index.html';
                 }
-            }   
+            }; 
             
             // Chama a função para carregar dados quando a página é carregada
 
             window.onload = carregarDados;
         </script>
 
-        <script>
+        <script> // Filtro da Tabela
             function aplicarFiltro(filtro) {
                 const linhas = document.querySelectorAll('#tabelaDoadores tbody tr');
 
@@ -399,7 +457,7 @@
                     // Verifica se o texto da linha inclui o valor do filtro
                     linha.style.display = textoLinha.includes(filtro) ? '' : 'none';
                 });
-            }
+            };
 
             // Adiciona o evento de input ao elemento com ID 'filtro'
             document.getElementById('filtro').addEventListener('input', function () {
