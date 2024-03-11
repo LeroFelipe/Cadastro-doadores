@@ -62,6 +62,7 @@
         </div>
 
         <script>
+
             // Função para carregar dados do servidor e atualizar a tabela
 
             async function carregarDados() {
@@ -105,7 +106,7 @@
                                             <td><div class="CPF">******</div>
                                                 <span class="icone" onclick="toggleCPF('${doador._id}','${doador.cpf}')">&#128065;</span>
                                             </td>
-                                            <td class="sangue">${doador.tipoSanguineo}</td>
+                                            <td class="tipoSanguineo">${doador.tipoSanguineo}</td>
                                             <td class="genero">${doador.genero}</td>
                                             <td>${idadeDoador} Anos</td>
                                             <td><input type="date" name="dataDoacao" class="dataDoacao" required></td>
@@ -170,7 +171,9 @@
                                 protocolo: protocolo
                             };
 
-                            fetch(`/api/include`, {
+                            console.log(dados);
+
+                            fetch(`/api/edit`, {
                                 method: 'POST',
                                 headers: {
                                     'Content-Type': 'application/json',
@@ -239,7 +242,8 @@
             // Funções para lidar com a edição de doadores
 
             function editarDoador(doadorId, btnEditar) {
-                const campos = ['nome', 'endereco', 'celular', 'nascimento', 'CPF', 'sangue', 'genero'];
+                const campos = ['nome', 'endereco', 'celular', 'nascimento', 'CPF', 'tipoSanguineo', 'genero'];
+                let elementoAntes = {};
 
                 // Salvar a referência à função tornarClicavel para remoção posterior
                 const tornarClicavel = function () {
@@ -255,6 +259,8 @@
                         inputElement.type = 'number';
                     } else if (this.classList.contains('nascimento')){
                         inputElement.type = 'date';
+                    } else if (this.classList.contains('tipoSanguineo')){
+                        inputElement.type = 'text';
                     } else {
                         inputElement.type = 'text'
                     }
@@ -279,23 +285,55 @@
                     const elemento = document.querySelector(`tr[doador-id="${doadorId}"] .${campo}`);
                     elemento.style.cursor = 'pointer';
                     elemento.addEventListener('click', tornarClicavel);
+                    elementoAntes[campo] = elemento.innerText;
                 });
 
-                console.log("TESTE 0");
+                console.log(elementoAntes);
+
                 btnEditar.innerText = 'Salvar';
                 btnEditar.style.backgroundColor = '#ff6868';
 
                 btnEditar.onclick = function (){
                     if (btnEditar.innerText == 'Salvar'){
                         btnEditar.innerText = 'Editar';            
-                        btnEditar.style.backgroundColor = '#c5c5c56c'; 
-                        console.log("TESTE 1");
+                        btnEditar.style.backgroundColor = '#c5c5c56c';
+
+                        let dados = {
+                            doadorId: doadorId,
+                        };
+
                         // Remover o ouvinte de evento usando a mesma função utilizada para adicionar
                         campos.forEach(function (campo) {
                             const elemento = document.querySelector(`tr[doador-id="${doadorId}"] .${campo}`);
                             elemento.removeEventListener('click', tornarClicavel);
                             elemento.style.cursor = 'text';
-                        });  
+
+                            if (elemento.textContent !== elementoAntes[campo]){
+                                dados[campo] = elemento.textContent;
+                            }
+                            
+                        });
+
+                        console.log(dados);
+
+                        // Faça uma solicitação AJAX para o servidor
+                        fetch('/api/edit', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify(dados),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log('Sucesso:', data);
+                            
+                            alert('Doador atualizado!');
+                        })
+                        .catch((error) => {
+                            console.error('Erro:', error);
+                        });
+
                     } else{
                         btnEditar.innerText = 'Salvar';
                         btnEditar.style.backgroundColor = '#ff6868';
@@ -304,7 +342,6 @@
                             elemento.style.cursor = 'pointer';
                             elemento.addEventListener('click', tornarClicavel);
                         });
-                        console.log("TESTE 2");
                     };
                 };
             }

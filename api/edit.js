@@ -4,8 +4,8 @@ const { MongoClient, ObjectId, ServerApiVersion } = require("mongodb");
 
 module.exports = async (req, res) => {
 
-    // Recuperar os parâmetros do corpo da solicitação
-    const { doadorId, dataDoacao, protocolo } = req.body;
+    // Recuperar todos os parâmetros do corpo da solicitação
+    const requestBody = req.body;
 
     // Conectar ao MongoDB
 const uri = process.env.MONGODB_URI;
@@ -25,14 +25,13 @@ const uri = process.env.MONGODB_URI;
         const collection = db.collection('doadores');
 
         // Converter o ID para o formato ObjectId
-        const objectIdDoadorId = new ObjectId(String(doadorId));
+        const objectIdDoadorId = new ObjectId(String(requestBody.doadorId));
 
         const query = { _id: objectIdDoadorId };
+        
+        // Construir o objeto de atualização dinamicamente
         const update = {
-            $set: {
-                dataDoacao: dataDoacao,
-                protocolo: protocolo
-            }
+            $set: requestBody
         };
 
         // Realizar a operação de atualização
