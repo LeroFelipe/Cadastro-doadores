@@ -263,8 +263,7 @@
             };
 
             function tornarClicavel(elemento) {
-                console.log(elemento);
-
+                //console.log(elemento);
 
                 elemento.style.cursor = 'pointer';
                 elemento.addEventListener('click', function () {
@@ -287,10 +286,15 @@
 
                     inputElement.addEventListener('blur', function () {
                         const novoValor = this.value;
-                        elemento.textContent = novoValor;
+                        if (inputElement.type == 'date'){
+                            elemento.textContent = dataBrasil(novoValor);
+                        }else{
+                            elemento.textContent = novoValor;
+                        }
+                        
                     });
 
-                    inputElement.focus(); // Dá foco ao input
+                    inputElement.focus();
                 });
             };
 
