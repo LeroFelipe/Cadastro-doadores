@@ -93,7 +93,7 @@
                         if (doador.dataDoacao) {
                             const dataDoacaoUTC = new Date(doador.dataDoacao);
                             dataDoacaoLocal = dataDoacaoUTC.toISOString().split('T')[0];
-                        }
+                        };
                                      
                         const idadeDoador = calcularIdade(doador.dataNascimento);
 
@@ -133,10 +133,10 @@
                         const inputProt = newRow.querySelector('.protocolo');
                         if(dataDoacaoLocal){
                             inputDate.value = dataDoacaoLocal;
-                        }
+                        };
                         if(doador.protocolo){
                             inputProt.value  = doador.protocolo;
-                        }
+                        };
 
                         id++;
 
@@ -144,8 +144,8 @@
                     
                 } catch (error) {
                     console.error('Erro ao carregar dados:', error);
-                }
-            };
+                };
+            }
 
             // Função para lidar com inclusão da data da doação
 
@@ -154,49 +154,51 @@
                 // Encontrar o input de data correspondente à linha do doador com o id
                 const inputDate = document.querySelector(`tr[doador-id="${doadorId}"] .dataDoacao`);
                 const inputProt = document.querySelector(`tr[doador-id="${doadorId}"] .protocolo`);
-
-                // Obter o valor da data e protocolo
                 const dataDoacao = inputDate.value; 
                 const protocolo = inputProt.value;
 
                 if(dataDoacao && protocolo){
                     // Popup de confirmação
-                    const confirmacao = window.confirm('Confirmar inclusão de dados?');
+                    const mensagem = 'Confirmar inclusão de dados?';
 
                     // Enviar dados p/ servidor
-                    if(confirmacao){
-                        // Construir objeto com dados a serem enviados
-                        const dados = {
-                            doadorId: doadorId,
-                            dataDoacao: dataDoacao,
-                            protocolo: protocolo
-                        };
+                    const confirmarAgendamento = function (confirmacao) {
+                        if (confirmacao) {
+                            const dados = {
+                                doadorId: doadorId,
+                                dataDoacao: dataDoacao,
+                                protocolo: protocolo
+                            };
 
-                        // Enviar a solicitação HTTP POST para a rota de agendamento do doador no backend
-                        fetch(`/api/include`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
-                            body: JSON.stringify(dados),
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            console.log(data.message);
-                            // Adicionar lógica adicional, se necessário
-                        })
-                        .catch(error => {
-                            console.error('Erro ao agendar doador:', error);
-                        });
-                    }
-                }else{alert('Insira a data e o protocolo!');}
+                            fetch(`/api/include`, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/json',
+                                },
+                                body: JSON.stringify(dados),
+                            })
+                            .then(response => response.json())
+                            .then(data => {
+                                console.log(data.message);
+                                // Adicionar lógica adicional, se necessário
+                            })
+                            .catch(error => {
+                                console.error('Erro ao agendar doador:', error);
+                            });
+                        }
+                    };
+
+                    exibirAlerta(mensagem, confirmarAgendamento);
+                } else {
+                    alert('Insira a data e o protocolo!');
+                }
                 
                 // Atualizar a célula 'Pŕoxima Doação'
                 const prxDoacao = document.querySelector(`tr[doador-id="${doadorId}"] .prxDoacao`);                
                 prxDoacao.textContent = `${dataBrasil(calcularProximaDoacao(genero, idade, dataDoacao).data)}
                                             ${calcularProximaDoacao(genero, idade, dataDoacao).cor === '#23962c' ? ' 👍' : ' 👎'}`; 
                 prxDoacao.style.color = `${calcularProximaDoacao(genero, idade, dataDoacao).cor}`;             
-            };
+            }
 
             //Função para calcular a próxima doação e cor da data
 
@@ -257,10 +259,10 @@
                         btnEditar.innerText = 'Salvar';
                         btnEditar.style.backgroundColor = '#ff6868';
                         console.log("TESTE 2");
-                    }
+                    };
                                                          
-                }
-            };
+                };
+            }
 
             function tornarClicavel(elemento) {
                 //console.log(elemento);
@@ -301,36 +303,37 @@
             // Função para lidar com a exclusão do doador
 
             function excluirDoador(doadorId, nome) {
+                const mensagem = `Você realmente deseja excluir o doador:\n${nome} ?`;
 
-                // Encontrar a linha pelo atributo doador-id
-                const linha = document.querySelector(`tr[doador-id="${doadorId}"]`);
+                // Função para lidar com a confirmação
+                const confirmarExclusao = function (confirmacao) {
+                    if (confirmacao) {
+                        fetch(`/api/delete`, {
+                            method: 'DELETE',
+                            headers: {
+                                'Content-Type': 'application/json',
+                            },
+                            body: JSON.stringify({ doadorId }),
+                        })
+                        .then(response => response.json())
+                        .then(data => {
+                            console.log(data.message);
+                            // Atualizar a tabela escondendo a linha
+                            const linha = document.querySelector(`tr[doador-id="${doadorId}"]`);
+                            linha.style.display = "none";
+                        })
+                        .catch(error => {
+                            console.error('Erro ao excluir doador:', error);
+                        });
+                        console.log('Excluir doador com ID:', doadorId);
+                    } else {
+                        console.log('Exclusão cancelada pelo usuário.');
+                    }
+                };
 
-                // Popup de confirmação
-                const confirmacao = window.confirm(`Você realmente deseja excluir o doador:\n${nome} ?`);
-
-                // Se o usuário confirmar, prosseguir com a exclusão
-                if (confirmacao) {
-                    fetch(`/api/delete`, {
-                        method: 'DELETE',
-                        headers: {
-                            'Content-Type': 'application/json',
-                        },
-                        body: JSON.stringify({ doadorId }),
-                                })
-                    .then(response => response.json())
-                    .then(data => {
-                        console.log(data.message);
-                        // Atualizar a tabela escondendo a linha 
-                        linha.style.display = "none";
-                    })
-                    .catch(error => {
-                        console.error('Erro ao excluir doador:', error);
-                    });
-                    console.log('Excluir doador com ID:', doadorId);
-                } else {
-                    console.log('Exclusão cancelada pelo usuário.');
-                }
-            };
+                // Exibir mensagem de confirmação
+                exibirAlerta(mensagem, confirmarExclusao);
+            }
 
             // Função para formatar a data no formato aaaa/mm/dd
 
@@ -340,7 +343,7 @@
                 const mes = String(dataObj.getMonth() + 1).padStart(2, '0');
                 const ano = dataObj.getFullYear();
                 return `${ano}/${mes}/${dia}`;
-            };
+            }
             
             // Função para mudar o formato da data p/ DD/MM/AAAA
 
@@ -385,10 +388,10 @@
                 // Se o aniversário ainda não ocorreu este ano, subtrai 1 da idade
                 if (!aniversarioJaOcorreu) {
                     idade--;
-                }
+                };
 
                 return idade;
-            };
+            }
 
             // Função para exibir e ocultar o CPF
 
@@ -402,29 +405,59 @@
                 } else {
                     // Oculta o CPF
                     divCPF.innerHTML = `******`;
-                }
+                };
 
                 // Atualiza o dataset.visivel
                 divCPF.dataset.visivel = visivel ? 'false' : 'true';
-            };
+            }
 
             // Função para Logout
 
             function sair() {
-                const confirmacao = window.confirm(`Realmente deseja sair?`);
-
-                if(confirmacao){
-                    console.log("teste");
+                exibirAlerta('Realmente deseja sair?', function (confirmacao) {
+                    if (confirmacao) {
                     const token = localStorage.getItem('token');
                     localStorage.removeItem('token');
                     window.location.href = 'index.html';
-                }
-            }; 
+                    }
+                });
+            }
+
+            // Função para exibir alertas customizados
+
+            function exibirAlerta(mensagem, callback) {
+                const overlay = document.getElementById('overlay');
+                const mensagemElemento = document.getElementById('mensagemTexto');
+                const botaoSim = document.getElementById('botaoSim');
+                const botaoNao = document.getElementById('botaoNao');
+
+                mensagemElemento.innerText = mensagem;
+                botaoSim.onclick = function () {
+                    overlay.style.display = 'none';
+                    callback(true);
+                };
+
+                botaoNao.onclick = function () {
+                    overlay.style.display = 'none';
+                    callback(false);
+                };
+
+                overlay.style.display = 'flex';
+            }
             
             // Chama a função para carregar dados quando a página é carregada
-
             window.onload = carregarDados;
+
         </script>
+
+        <!--Caixa de Mensagens para Alertas -->
+        <div id="overlay">
+            <div id="mensagem">
+            <span id="mensagemTexto"></span>
+            <button id="botaoSim" onclick="confirmarAcao(true)">Sim</button>
+            <button id="botaoNao" onclick="confirmarAcao(false)">Não</button>
+            </div>
+        </div>
 
         <script> // Filtro da Tabela
             function aplicarFiltro(filtro) {
