@@ -241,9 +241,44 @@
             function editarDoador(doadorId, btnEditar) {
                 const campos = ['nome', 'endereco', 'celular', 'nascimento', 'CPF', 'sangue', 'genero'];
 
+                // Salvar a referência à função tornarClicavel para remoção posterior
+                const tornarClicavel = function () {
+                    console.log('Testando');
+                    const valorOriginal = this.textContent;
+                    this.innerHTML = ''; // Limpa o conteúdo do elemento
+
+                    const inputElement = document.createElement('input');
+                    inputElement.value = valorOriginal;
+
+                    // Verificar o tipo de elemento
+                    if (this.classList.contains('celular') || this.classList.contains('CPF') ) {
+                        inputElement.type = 'number';
+                    } else if (this.classList.contains('nascimento')){
+                        inputElement.type = 'date';
+                    } else {
+                        inputElement.type = 'text'
+                    }
+
+                    this.appendChild(inputElement);
+
+                    inputElement.addEventListener('blur', function () {
+                        const novoValor = this.value;
+
+                        // Remover o input e criar um novo elemento de texto
+                        const textoElement = document.createElement('span');
+                        textoElement.textContent = (inputElement.type === 'date') ? dataBrasil(novoValor) : novoValor;
+
+                        // Substituir o input pelo elemento de texto
+                        this.parentNode.replaceChild(textoElement, this);
+                    });
+
+                    inputElement.focus();
+                };
+
                 campos.forEach(function (campo) {
                     const elemento = document.querySelector(`tr[doador-id="${doadorId}"] .${campo}`);
-                    tornarClicavel(elemento);
+                    elemento.style.cursor = 'pointer';
+                    elemento.addEventListener('click', tornarClicavel);
                 });
 
                 console.log("TESTE 0");
@@ -254,51 +289,25 @@
                     if (btnEditar.innerText == 'Salvar'){
                         btnEditar.innerText = 'Editar';            
                         btnEditar.style.backgroundColor = '#c5c5c56c'; 
-                        console.log("TESTE 1");       
+                        console.log("TESTE 1");
+                        // Remover o ouvinte de evento usando a mesma função utilizada para adicionar
+                        campos.forEach(function (campo) {
+                            const elemento = document.querySelector(`tr[doador-id="${doadorId}"] .${campo}`);
+                            elemento.removeEventListener('click', tornarClicavel);
+                            elemento.style.cursor = 'text';
+                        });  
                     } else{
                         btnEditar.innerText = 'Salvar';
                         btnEditar.style.backgroundColor = '#ff6868';
+                        campos.forEach(function (campo) {
+                            const elemento = document.querySelector(`tr[doador-id="${doadorId}"] .${campo}`);
+                            elemento.style.cursor = 'pointer';
+                            elemento.addEventListener('click', tornarClicavel);
+                        });
                         console.log("TESTE 2");
                     };
-                                                         
                 };
             }
-
-            function tornarClicavel(elemento) {
-                //console.log(elemento);
-
-                elemento.style.cursor = 'pointer';
-                elemento.addEventListener('click', function () {
-                    const valorOriginal = elemento.textContent;
-                    elemento.innerHTML = ''; // Limpa o conteúdo do elemento
-
-                    const inputElement = document.createElement('input');
-                    inputElement.value = valorOriginal;
-
-                    // Verificar o tipo de elemento
-                    if (elemento.classList.contains('celular') || elemento.classList.contains('CPF') ) {
-                        inputElement.type = 'number';
-                    } else if (elemento.classList.contains('nascimento')){
-                        inputElement.type = 'date';
-                    } else {
-                        inputElement.type = 'text'
-                    }
-
-                    elemento.appendChild(inputElement);
-
-                    inputElement.addEventListener('blur', function () {
-                        const novoValor = this.value;
-                        if (inputElement.type == 'date'){
-                            elemento.textContent = dataBrasil(novoValor);
-                        }else{
-                            elemento.textContent = novoValor;
-                        }
-                        
-                    });
-
-                    inputElement.focus();
-                });
-            };
 
             // Função para lidar com a exclusão do doador
 
