@@ -67,14 +67,37 @@
 
             async function carregarDados() {
                 try {
-                    const response = await fetch('/api/read');
+                    const token = localStorage.getItem('token');
+
+                    // Verifica se o token está presente
+                    if (!token) {
+                        throw new Error('Token não encontrado');
+                        window.location.href = 'index.html';
+                    }
+
+                    // Define os cabeçalhos da requisição com o token de autorização
+                    const headers = {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${token}` // Inclui o token no cabeçalho de autorização
+                    };
+
+                    // Faz a solicitação fetch com os cabeçalhos definidos
+                    const response = await fetch('/api/read', {
+                        method: 'GET',
+                        headers: headers
+                    });
+
+                    // Verifica se a resposta está ok
+                    if (!response.ok) {
+                        throw new Error('Erro ao carregar os dados');
+                    }
+
+                    // Converte a resposta para JSON
                     const dados = await response.json();
 
                     // Limpa a tabela
                     document.getElementById('tabelaDoadores').getElementsByTagName('tbody')[0].innerHTML = "";
                     
-                    let id = 1;
-
                     // Popula a tabela 
                     dados.forEach((doador) => {
 
@@ -138,8 +161,6 @@
                         if(doador.protocolo){
                             inputProt.value  = doador.protocolo;
                         };
-
-                        id++;
 
                     });
                     
