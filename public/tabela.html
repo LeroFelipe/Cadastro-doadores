@@ -8,12 +8,6 @@
     <link rel="stylesheet" href="assets/css/style.css">
     <title>Doadores cadastrados</title>
 
-   <script>
-        const token = localStorage.getItem('token');      
-        if (!token) {
-          window.location.href = 'index.html';
-        }
-    </script>
 </head>
 <body>
     <div class="tabela">
@@ -71,8 +65,7 @@
 
                     // Verifica se o token está presente
                     if (!token) {
-                        throw new Error('Token não encontrado');
-                        window.location.href = 'index.html';
+                        window.location.href = 'index.html';                        
                     }
 
                     // Define os cabeçalhos da requisição com o token de autorização
@@ -173,6 +166,8 @@
 
             function agendarDoador(doadorId, genero, idade) {
 
+                const token = localStorage.getItem('token');
+
                 // Encontrar o input de data correspondente à linha do doador com o id
                 const inputDate = document.querySelector(`tr[doador-id="${doadorId}"] .dataDoacao`);
                 const inputProt = document.querySelector(`tr[doador-id="${doadorId}"] .protocolo`);
@@ -194,11 +189,15 @@
 
                             console.log(dados);
 
+                            // Define os cabeçalhos da requisição com o token de autorização
+                            const headers = {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}` // Inclui o token no cabeçalho de autorização
+                            };
+
                             fetch(`/api/edit`, {
                                 method: 'POST',
-                                headers: {
-                                    'Content-Type': 'application/json',
-                                },
+                                headers: headers,
                                 body: JSON.stringify(dados),
                             })
                             .then(response => response.json())
@@ -263,6 +262,8 @@
             // Funções para lidar com a edição de doadores
 
             function editarDoador(doadorId, btnEditar) {
+                const token = localStorage.getItem('token');
+
                 const campos = ['nome', 'endereco', 'celular', 'nascimento', 'CPF', 'tipoSanguineo', 'genero'];
                 let elementoAntes = {};
 
@@ -337,12 +338,16 @@
 
                         console.log(dados);
 
+                        // Define os cabeçalhos da requisição com o token de autorização
+                        const headers = {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}` // Inclui o token no cabeçalho de autorização
+                            };
+
                         // Faça uma solicitação AJAX para o servidor
                         fetch('/api/edit', {
                             method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
+                            headers: headers,
                             body: JSON.stringify(dados),
                         })
                         .then(response => response.json())
@@ -370,16 +375,22 @@
             // Função para lidar com a exclusão do doador
 
             function excluirDoador(doadorId, nome) {
+                const token = localStorage.getItem('token');
                 const mensagem = `Você realmente deseja excluir o doador:\n${nome} ?`;
 
                 // Função para lidar com a confirmação
                 const confirmarExclusao = function (confirmacao) {
                     if (confirmacao) {
+
+                        // Define os cabeçalhos da requisição com o token de autorização
+                        const headers = {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${token}` // Inclui o token no cabeçalho de autorização
+                            };
+
                         fetch(`/api/delete`, {
                             method: 'DELETE',
-                            headers: {
-                                'Content-Type': 'application/json',
-                            },
+                            headers: headers,
                             body: JSON.stringify({ doadorId }),
                         })
                         .then(response => response.json())
