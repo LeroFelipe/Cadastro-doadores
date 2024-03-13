@@ -7,6 +7,12 @@
     <link rel="icon" type="image/x-icon" href="assets/img/icon.png"/>
     <link rel="stylesheet" href="assets/css/style.css">
     <title>Doadores cadastrados</title>
+    <script>
+        const token = localStorage.getItem('token');      
+        if (!token) {
+          window.location.href = 'index.html';
+        }
+    </script>
 
 </head>
 <body>
@@ -75,86 +81,92 @@
                     };
 
                     // Faz a solicitação fetch com os cabeçalhos definidos
-                    const response = await fetch('/api/read', {
+                    fetch('/api/read', {
                         method: 'GET',
                         headers: headers
-                    });
-
-                    // Verifica se a resposta está ok
-                    if (!response.ok) {
-                        throw new Error('Erro ao carregar os dados');
-                    }
-
-                    // Converte a resposta para JSON
-                    const dados = await response.json();
-
-                    // Limpa a tabela
-                    document.getElementById('tabelaDoadores').getElementsByTagName('tbody')[0].innerHTML = "";
-                    
-                    // Popula a tabela 
-                    dados.forEach((doador) => {
-
-                        const tabelaDoadores = document.getElementById('tabelaDoadores');
-                        const tbody = tabelaDoadores.getElementsByTagName('tbody')[0];
-
-                        const newRow = tbody.insertRow();
-
-                        let dataDoacaoLocal;
-
-                        // Usando setAttribute para adicionar o atributo ao <tr>
-                        newRow.setAttribute('doador-id', doador._id);
-
-                        // Formata a data antes de inserir na tabela
-                        const dataNascimentoBr = dataBrasil(doador.dataNascimento);
-
-                        if (doador.dataDoacao) {
-                            const dataDoacaoUTC = new Date(doador.dataDoacao);
-                            dataDoacaoLocal = dataDoacaoUTC.toISOString().split('T')[0];
-                        };
-                                     
-                        const idadeDoador = calcularIdade(doador.dataNascimento);
-
-                        // Adiciona as colunas com os dados do doador
-                        newRow.innerHTML = `<td class="nome">${doador.nome}</td>
-                                            <td class="endereco">${doador.endereco}</td>
-                                            <td class="celular">${doador.celular}</td>
-                                            <td class="nascimento">${dataNascimentoBr}</td>
-                                            <td><div class="CPF">******</div>
-                                                <span class="icone" onclick="toggleCPF('${doador._id}','${doador.cpf}')">&#128065;</span>
-                                            </td>
-                                            <td class="tipoSanguineo">${doador.tipoSanguineo}</td>
-                                            <td class="genero">${doador.genero}</td>
-                                            <td>${idadeDoador} Anos</td>
-                                            <td><input type="date" name="dataDoacao" class="dataDoacao" required></td>
-                                            <td><input type="text" oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '')" name="protocolo" class="protocolo" required></td>
-                                            <td class="prxDoacao" style="color: ${calcularProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal).cor}">
-                                                ${dataBrasil(calcularProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal).data)}
-                                                ${calcularProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal).cor === '#23962c' ? ' 👍' : ' 👎'}
-                                            </td>`;
+                    })
+                    .then(response => {
+                        if (response.status === 403) {
+                            // Token inválido, remover do localStorage e redirecionar para a página index.html
+                            localStorage.removeItem('token');
+                            window.location.href = 'index.html';
+                            throw new Error('Token inválido');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        const dados = data;
                         
-                        // Adiciona uma célula para os botões
-                        const buttonsCell = newRow.insertCell();
+                        // Limpa a tabela
+                        document.getElementById('tabelaDoadores').getElementsByTagName('tbody')[0].innerHTML = "";
 
-                        // Cria uma div para os botões e adiciona à célula
-                        const buttonsDiv = document.createElement('div');
-                        buttonsDiv.classList.add('buttons-container');
-                        buttonsCell.appendChild(buttonsDiv);
+                        // Popula a tabela 
+                        dados.forEach((doador) => {
 
-                        // Adiciona os botões na div
-                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="agendarDoador('${doador._id}', '${doador.genero}', ${idadeDoador})">Incluir</button>`);
-                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="editarDoador('${doador._id}', this)">Editar</button>`);
-                        buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="excluirDoador('${doador._id}', '${doador.nome}')">Excluir</button>`);
+                            const tabelaDoadores = document.getElementById('tabelaDoadores');
+                            const tbody = tabelaDoadores.getElementsByTagName('tbody')[0];
 
-                        // Verifica se a data de doação não é nula antes de preencher o campo de data
-                        const inputDate = newRow.querySelector('.dataDoacao');
-                        const inputProt = newRow.querySelector('.protocolo');
-                        if(dataDoacaoLocal){
-                            inputDate.value = dataDoacaoLocal;
-                        };
-                        if(doador.protocolo){
-                            inputProt.value  = doador.protocolo;
-                        };
+                            const newRow = tbody.insertRow();
 
+                            let dataDoacaoLocal;
+
+                            // Usando setAttribute para adicionar o atributo ao <tr>
+                            newRow.setAttribute('doador-id', doador._id);
+
+                            // Formata a data antes de inserir na tabela
+                            const dataNascimentoBr = dataBrasil(doador.dataNascimento);
+
+                            if (doador.dataDoacao) {
+                                const dataDoacaoUTC = new Date(doador.dataDoacao);
+                                dataDoacaoLocal = dataDoacaoUTC.toISOString().split('T')[0];
+                            };
+                                        
+                            const idadeDoador = calcularIdade(doador.dataNascimento);
+
+                            // Adiciona as colunas com os dados do doador
+                            newRow.innerHTML = `<td class="nome">${doador.nome}</td>
+                                                <td class="endereco">${doador.endereco}</td>
+                                                <td class="celular">${doador.celular}</td>
+                                                <td class="nascimento">${dataNascimentoBr}</td>
+                                                <td><div class="CPF">******</div>
+                                                    <span class="icone" onclick="toggleCPF('${doador._id}','${doador.cpf}')">&#128065;</span>
+                                                </td>
+                                                <td class="tipoSanguineo">${doador.tipoSanguineo}</td>
+                                                <td class="genero">${doador.genero}</td>
+                                                <td>${idadeDoador} Anos</td>
+                                                <td><input type="date" name="dataDoacao" class="dataDoacao" required></td>
+                                                <td><input type="text" oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '')" name="protocolo" class="protocolo" required></td>
+                                                <td class="prxDoacao" style="color: ${calcularProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal).cor}">
+                                                    ${dataBrasil(calcularProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal).data)}
+                                                    ${calcularProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal).cor === '#23962c' ? ' 👍' : ' 👎'}
+                                                </td>`;
+
+                            // Adiciona uma célula para os botões
+                            const buttonsCell = newRow.insertCell();
+
+                            // Cria uma div para os botões e adiciona à célula
+                            const buttonsDiv = document.createElement('div');
+                            buttonsDiv.classList.add('buttons-container');
+                            buttonsCell.appendChild(buttonsDiv);
+
+                            // Adiciona os botões na div
+                            buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="agendarDoador('${doador._id}', '${doador.genero}', ${idadeDoador})">Incluir</button>`);
+                            buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="editarDoador('${doador._id}', this)">Editar</button>`);
+                            buttonsDiv.insertAdjacentHTML('beforeend', `<button onclick="excluirDoador('${doador._id}', '${doador.nome}')">Excluir</button>`);
+
+                            // Verifica se a data de doação não é nula antes de preencher o campo de data
+                            const inputDate = newRow.querySelector('.dataDoacao');
+                            const inputProt = newRow.querySelector('.protocolo');
+                            if(dataDoacaoLocal){
+                                inputDate.value = dataDoacaoLocal;
+                            };
+                            if(doador.protocolo){
+                                inputProt.value  = doador.protocolo;
+                            };
+                        });
+                    })
+                    .catch(error => {
+                        console.error('Erro ao agendar doador:', error);
                     });
                     
                 } catch (error) {
@@ -200,7 +212,15 @@
                                 headers: headers,
                                 body: JSON.stringify(dados),
                             })
-                            .then(response => response.json())
+                            .then(response => {
+                                if (response.status === 403) {
+                                    // Token inválido, remover do localStorage e redirecionar para a página index.html
+                                    localStorage.removeItem('token');
+                                    window.location.href = 'index.html';
+                                    throw new Error('Token inválido');
+                                }
+                                return response.json();
+                            })
                             .then(data => {
                                 console.log(data.message);
                                 // Adicionar lógica adicional, se necessário
@@ -350,7 +370,15 @@
                             headers: headers,
                             body: JSON.stringify(dados),
                         })
-                        .then(response => response.json())
+                        .then(response => {
+                                if (response.status === 403) {
+                                    // Token inválido, remover do localStorage e redirecionar para a página index.html
+                                    localStorage.removeItem('token');
+                                    window.location.href = 'index.html';
+                                    throw new Error('Token inválido');
+                                }
+                                return response.json();
+                            })
                         .then(data => {
                             console.log('Sucesso:', data);
                             
@@ -393,8 +421,17 @@
                             headers: headers,
                             body: JSON.stringify({ doadorId }),
                         })
-                        .then(response => response.json())
+                        .then(response => {
+                                if (response.status === 403) {
+                                    // Token inválido, remover do localStorage e redirecionar para a página index.html
+                                    localStorage.removeItem('token');
+                                    window.location.href = 'index.html';
+                                    throw new Error('Token inválido');
+                                }
+                                return response.json();
+                            })
                         .then(data => {
+                            console.log('Excluir doador com ID:', doadorId);
                             console.log(data.message);
                             // Atualizar a tabela escondendo a linha
                             const linha = document.querySelector(`tr[doador-id="${doadorId}"]`);
@@ -402,8 +439,7 @@
                         })
                         .catch(error => {
                             console.error('Erro ao excluir doador:', error);
-                        });
-                        console.log('Excluir doador com ID:', doadorId);
+                        });                        
                     } else {
                         console.log('Exclusão cancelada pelo usuário.');
                     }

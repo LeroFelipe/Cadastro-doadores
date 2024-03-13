@@ -7,6 +7,14 @@
     <link rel="icon" type="image/x-icon" href="assets/img/icon.png"/>
     <link rel="stylesheet" href="assets/css/style.css">
     <title>Formulário de cadastro</title>
+
+    <script>
+        const token = localStorage.getItem('token');      
+        if (!token) {
+          window.location.href = 'index.html';
+        }
+    </script>
+
 </head>
 <body>
     <div class="container">
@@ -143,37 +151,40 @@
             // Exiba os dados no console antes de enviar
             console.log('Dados a serem enviados:', dados);
 
-            // Verifica se o token está presente
-            if (!token) {
-                console.error('Token não encontrado');
-                window.location.href = 'index.html';
-            } else {
-                // Define os cabeçalhos da requisição com o token de autorização
-                const headers = {
-                    'Content-Type': 'application/json',
-                    'Authorization': `Bearer ${token}` // Inclui o token no cabeçalho de autorização
-                };
+            // Define os cabeçalhos da requisição com o token de autorização
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}` // Inclui o token no cabeçalho de autorização
+            };
 
-                // Faça uma solicitação AJAX para o servidor
-                fetch('/api/write', {
-                    method: 'POST',
-                    headers: headers,
-                    body: JSON.stringify(dados),
-                })
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Sucesso:', data);
-                    
-                    alert('Cadastro realizado com sucesso!');
+            // Faça uma solicitação AJAX para o servidor
+            fetch('/api/write', {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(dados),
+            })
+            .then(response => {
+                if (response.status === 403) {
+                    // Token inválido, remover do localStorage e redirecionar para a página index.html
+                    localStorage.removeItem('token');
+                    window.location.href = 'index.html';
+                    throw new Error('Token inválido');
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Sucesso:', data);
+                
+                alert('Cadastro realizado com sucesso!');
 
-                    // Redirecione para a página principal ou faça qualquer outra ação necessária
-                    window.location.href = "cadastro.html";
-                })
-                .catch((error) => {
-                    console.error('Erro:', error);
-                    // Lidar com o erros de acordo com os requisitos do projeto
-                });
-            }
+                // Redirecione para a página principal ou faça qualquer outra ação necessária
+                window.location.href = "cadastro.html";
+            })
+            .catch((error) => {
+                console.error('Erro:', error);
+                // Lidar com o erros de acordo com os requisitos do projeto
+            });
+            
         }
 
         // Função para verificar se a string contém apenas caracteres permitidos
