@@ -328,7 +328,7 @@
 
                         // Substituir o input pelo elemento de texto
                         this.parentNode.replaceChild(textoElement, this);
-                        textoElement.addEventListener('click', tornarClicavel);
+                        //textoElement.addEventListener('click', tornarClicavel);
                     });
 
                     // Definir o foco no input
@@ -364,10 +364,22 @@
                             elemento.style.cursor = 'text';
 
                             if (elemento.textContent !== elementoAntes[campo]){
-                                dados[campo] = elemento.textContent;
-                                console.log(campo);
-                            }
-                            
+                                if(elemento.className == 'dataNascimento'){
+
+                                    console.log('[TESTE] É data de aniversário!')
+
+                                    if(elemento.textContent.includes('/')){
+                                        const partes = elemento.textContent.split('/');
+                                        if (partes.length === 3) {
+                                            // Verificar se há três partes (dia, mês, ano)
+                                            const data = `${partes[2]}-${partes[1]}-${partes[0]}`; 
+                                            dados[campo] = data; 
+                                        }
+                                    }              
+                                }else{
+                                    dados[campo] = elemento.textContent;
+                                }                                
+                            }                            
                         });
 
                         console.log(dados);
