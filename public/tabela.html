@@ -123,6 +123,8 @@
                                         
                             const idadeDoador = calcularIdade(doador.dataNascimento);
 
+                            var proximaDoacao = calcularProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal);
+
                             // Adiciona as colunas com os dados do doador
                             newRow.innerHTML = `<td class="nome">${doador.nome}</td>
                                                 <td class="endereco">${doador.endereco}</td>
@@ -136,9 +138,9 @@
                                                 <td>${idadeDoador} Anos</td>
                                                 <td><input type="date" name="dataDoacao" class="dataDoacao" required></td>
                                                 <td><input type="text" oninput="this.value = this.value.replace(/[^A-Za-z0-9]/g, '')" name="protocolo" class="protocolo" required></td>
-                                                <td class="prxDoacao" style="color: ${calcularProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal).cor}">
-                                                    ${dataBrasil(calcularProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal).data)}
-                                                    ${calcularProximaDoacao(doador.genero, idadeDoador, dataDoacaoLocal).cor === '#23962c' ? ' 👍' : ' 👎'}
+                                                <td class="prxDoacao" style="color: ${proximaDoacao.cor}">
+                                                    ${dataBrasil(proximaDoacao.data)}
+                                                    ${(proximaDoacao.cor === '#23962c') ? '👍' : ((proximaDoacao.cor === 'black') ? '' : '👎')}
                                                 </td>`;
 
                             // Adiciona uma célula para os botões
@@ -289,7 +291,6 @@
 
                 // Salvar a referência à função tornarClicavel para remoção posterior
                 const tornarClicavel = function () {
-                    console.log('Testando');
                     const valorOriginal = this.textContent;
                     this.innerHTML = ''; // Limpa o conteúdo do elemento
 
