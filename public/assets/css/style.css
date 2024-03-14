@@ -228,7 +228,7 @@ form{
     cursor: pointer;
     width: 50px;
     height: 50px;
-    transition: transform 0.3s ease, font-size 0.3s ease;
+    transition: transform 0.2s ease, font-size 0.2s ease;
     
 }
 
@@ -274,7 +274,7 @@ form{
 
 .iconeFiltro {
     cursor: pointer;
-    transition: transform 0.3s ease, font-size 0.3s ease;
+    transition: transform 0.2s ease, font-size 0.2s ease;
     margin-left: 6px;
 }
 

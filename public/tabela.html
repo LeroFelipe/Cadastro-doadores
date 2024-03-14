@@ -224,25 +224,26 @@
                                 return response.json();
                             })
                             .then(data => {
-                                console.log(data.message);
+                                alert(data.message);
                                 // Adicionar lógica adicional, se necessário
                             })
                             .catch(error => {
                                 console.error('Erro ao agendar doador:', error);
                             });
+
+                            // Atualizar a célula 'Pŕoxima Doação'
+                            const prxDoacao = document.querySelector(`tr[doador-id="${doadorId}"] .prxDoacao`);                
+                            prxDoacao.textContent = `${dataBrasil(calcularProximaDoacao(genero, idade, dataDoacao).data)}
+                                                        ${calcularProximaDoacao(genero, idade, dataDoacao).cor === '#23962c' ? ' 👍' : ' 👎'}`; 
+                            prxDoacao.style.color = `${calcularProximaDoacao(genero, idade, dataDoacao).cor}`;
+
                         }
                     };
 
                     exibirAlerta(mensagem, confirmarAgendamento);
                 } else {
                     alert('Insira a data e o protocolo!');
-                }
-                
-                // Atualizar a célula 'Pŕoxima Doação'
-                const prxDoacao = document.querySelector(`tr[doador-id="${doadorId}"] .prxDoacao`);                
-                prxDoacao.textContent = `${dataBrasil(calcularProximaDoacao(genero, idade, dataDoacao).data)}
-                                            ${calcularProximaDoacao(genero, idade, dataDoacao).cor === '#23962c' ? ' 👍' : ' 👎'}`; 
-                prxDoacao.style.color = `${calcularProximaDoacao(genero, idade, dataDoacao).cor}`;             
+                }                
             }
 
             //Função para calcular a próxima doação e cor da data
