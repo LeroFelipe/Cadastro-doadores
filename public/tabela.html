@@ -129,7 +129,7 @@
                             newRow.innerHTML = `<td class="nome">${doador.nome}</td>
                                                 <td class="endereco">${doador.endereco}</td>
                                                 <td class="celular">${doador.celular}</td>
-                                                <td class="nascimento">${dataNascimentoBr}</td>
+                                                <td class="dataNascimento">${dataNascimentoBr}</td>
                                                 <td><div class="CPF">******</div>
                                                     <span class="icone" onclick="toggleCPF('${doador._id}','${doador.cpf}')">&#128065;</span>
                                                 </td>
@@ -287,11 +287,13 @@
             function editarDoador(doadorId, btnEditar) {
                 const token = localStorage.getItem('token');
 
-                const campos = ['nome', 'endereco', 'celular', 'nascimento', 'CPF', 'tipoSanguineo', 'genero'];
+                const campos = ['nome', 'endereco', 'celular', 'dataNascimento', 'CPF', 'tipoSanguineo', 'genero'];
                 let elementoAntes = {};
-
+                
                 // Salvar a referência à função tornarClicavel para remoção posterior
                 const tornarClicavel = function () {
+                    this.removeEventListener('click', tornarClicavel);
+
                     const valorOriginal = this.textContent;
                     this.innerHTML = ''; // Limpa o conteúdo do elemento
 
@@ -301,13 +303,18 @@
                     // Verificar o tipo de elemento
                     if (this.classList.contains('celular') || this.classList.contains('CPF') ) {
                         inputElement.type = 'number';
-                    } else if (this.classList.contains('nascimento')){
+                    } else if (this.classList.contains('dataNascimento')){
                         inputElement.type = 'date';
                     } else if (this.classList.contains('tipoSanguineo')){
                         inputElement.type = 'text';
                     } else {
                         inputElement.type = 'text'
                     }
+
+                    // Copiar as classes do elemento original para o input
+                    this.className.split(' ').forEach(className => {
+                        inputElement.classList.add(className);
+                    });
 
                     this.appendChild(inputElement);
 
@@ -316,12 +323,15 @@
 
                         // Remover o input e criar um novo elemento de texto
                         const textoElement = document.createElement('span');
+                        textoElement.className = inputElement.className;
                         textoElement.textContent = (inputElement.type === 'date') ? dataBrasil(novoValor) : novoValor;
 
                         // Substituir o input pelo elemento de texto
                         this.parentNode.replaceChild(textoElement, this);
+                        textoElement.addEventListener('click', tornarClicavel);
                     });
 
+                    // Definir o foco no input
                     inputElement.focus();
                 };
 
@@ -331,6 +341,7 @@
                     elemento.addEventListener('click', tornarClicavel);
                     elementoAntes[campo] = elemento.innerText;
                 });
+                
 
                 console.log(elementoAntes);
 
@@ -354,6 +365,7 @@
 
                             if (elemento.textContent !== elementoAntes[campo]){
                                 dados[campo] = elemento.textContent;
+                                console.log(campo);
                             }
                             
                         });
@@ -382,15 +394,14 @@
                                 return response.json();
                             })
                         .then(data => {
-                            console.log('Sucesso:', data);
-                            
+                            console.log('Sucesso:', data);                            
                             alert('Doador atualizado!');
                         })
                         .catch((error) => {
                             console.error('Erro:', error);
                         });
 
-                    } else{
+                    }else{
                         btnEditar.innerText = 'Salvar';
                         btnEditar.style.backgroundColor = '#ff6868';
                         campos.forEach(function (campo) {
