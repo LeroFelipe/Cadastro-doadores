@@ -294,11 +294,13 @@
                 const tornarClicavel = function () {
                     this.removeEventListener('click', tornarClicavel);
 
+                    let selectElement;
                     const valorOriginal = this.textContent;
                     this.innerHTML = ''; // Limpa o conteúdo do elemento
 
                     const inputElement = document.createElement('input');
                     inputElement.value = valorOriginal;
+                    this.appendChild(inputElement);
 
                     // Verificar o tipo de elemento
                     if (this.classList.contains('celular') || this.classList.contains('CPF') ) {
@@ -306,9 +308,37 @@
                     } else if (this.classList.contains('dataNascimento')){
                         inputElement.type = 'date';
                     } else if (this.classList.contains('tipoSanguineo')){
+                        // Criar elemento select
+                        selectElement = document.createElement('select');
+
+                        // Adicionar opções ao select
+                        const opcoes = ['Selecione...', 'O+', 'O-', 'A+', 'A-', 'B+', 'B-', 'AB+', 'AB-'];
+                        opcoes.forEach(function(opcao) {
+                            const option = document.createElement('option');
+                            option.value = opcao === 'Selecione...' ? '' : opcao;
+                            option.textContent = opcao;
+                            selectElement.appendChild(option);
+                        });
+                        // Substituir o input pelo elemento select
+                        inputElement.parentNode.replaceChild(selectElement, inputElement);
+                    } else if (this.classList.contains('genero')){
+                        // Criar elemento select
+                        selectElement = document.createElement('select');
+
+                        // Adicionar opções ao select
+                        const opcoes = ['Selecione...', 'Masculino', 'Feminino'];
+                        opcoes.forEach(function(opcao) {
+                            const option = document.createElement('option');
+                            option.value = opcao === 'Selecione...' ? '' : opcao;
+                            option.textContent = opcao;
+                            selectElement.appendChild(option);
+                        });
+                        // Substituir o input pelo elemento select
+                        inputElement.parentNode.replaceChild(selectElement, inputElement);
+
+                    }else {
+                        console.log('teste, else');
                         inputElement.type = 'text';
-                    } else {
-                        inputElement.type = 'text'
                     }
 
                     // Copiar as classes do elemento original para o input
@@ -316,20 +346,35 @@
                         inputElement.classList.add(className);
                     });
 
-                    this.appendChild(inputElement);
+                    if(inputElement){
+                        inputElement.addEventListener('blur', function () {
+                            const novoValor = this.value;
 
-                    inputElement.addEventListener('blur', function () {
-                        const novoValor = this.value;
+                            // Remover o input e criar um novo elemento de texto
+                            const textoElement = document.createElement('span');
+                            textoElement.className = inputElement.className;
+                            textoElement.textContent = (inputElement.type === 'date') ? dataBrasil(novoValor) : novoValor;
 
-                        // Remover o input e criar um novo elemento de texto
-                        const textoElement = document.createElement('span');
-                        textoElement.className = inputElement.className;
-                        textoElement.textContent = (inputElement.type === 'date') ? dataBrasil(novoValor) : novoValor;
+                            // Substituir o input pelo elemento de texto
+                            this.parentNode.replaceChild(textoElement, this);
+                            textoElement.addEventListener('click', tornarClicavel);
+                        });
+                    }
+                    
+                    if(selectElement){
+                        selectElement.addEventListener('blur' , function(){
+                            const novoValor = this.value;
 
-                        // Substituir o input pelo elemento de texto
-                        this.parentNode.replaceChild(textoElement, this);
-                        //textoElement.addEventListener('click', tornarClicavel);
-                    });
+                            // Criar novo elemento de texto
+                            const textoElement = document.createElement('span');
+                            textoElement.className = inputElement.className;
+                            textoElement.textContent = novoValor; // Texto simples para o select
+
+                            // Substituir o select pelo elemento de texto
+                            this.parentNode.replaceChild(textoElement, this);
+                            textoElement.addEventListener('click', tornarClicavel);
+                        });
+                    }                  
 
                     // Definir o foco no input
                     inputElement.focus();
@@ -340,10 +385,7 @@
                     elemento.style.cursor = 'pointer';
                     elemento.addEventListener('click', tornarClicavel);
                     elementoAntes[campo] = elemento.innerText;
-                });
-                
-
-                console.log(elementoAntes);
+                });      
 
                 btnEditar.innerText = 'Salvar';
                 btnEditar.style.backgroundColor = '#ff6868';
@@ -365,9 +407,6 @@
 
                             if (elemento.textContent !== elementoAntes[campo]){
                                 if(elemento.className == 'dataNascimento'){
-
-                                    console.log('[TESTE] É data de aniversário!')
-
                                     if(elemento.textContent.includes('/')){
                                         const partes = elemento.textContent.split('/');
                                         if (partes.length === 3) {
